@@ -2,6 +2,7 @@
 import React from "react";
 import { GameProvider, useGame } from "@/context/GameContext";
 import ApiKeyForm from "@/components/ApiKeyForm";
+import ApiKeyError from "@/components/ApiKeyError";
 import StreetView from "@/components/StreetView";
 import MapSelector from "@/components/MapSelector";
 import ResultModal from "@/components/ResultModal";
@@ -12,8 +13,43 @@ import { cn } from "@/lib/utils";
 const GameContent: React.FC = () => {
   const { apiKey, gameState, startNewGame } = useGame();
 
-  if (!apiKey) {
-    return <ApiKeyForm />;
+  // Show loading state
+  if (gameState === "loading") {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="spinner mx-auto mb-4"></div>
+          <h2 className="text-xl font-light">Loading GeoQuest...</h2>
+          <p className="text-muted-foreground mt-2">Connecting to Google Maps</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Show error state
+  if (gameState === "error") {
+    return <ApiKeyError />;
+  }
+
+  // We no longer need this check since we're managing the API key on the backend
+  // Now we use this state to show the initial "Start Game" screen
+  if (gameState === "initial") {
+    return (
+      <div className="flex items-center justify-center min-h-screen p-4">
+        <div className="text-center max-w-md glass-panel p-8 animate-scale-in">
+          <h1 className="text-3xl font-light mb-4">Welcome to GeoQuest</h1>
+          <p className="text-muted-foreground mb-6">
+            Explore the world and test your geography skills. Can you guess where you are?
+          </p>
+          <Button 
+            onClick={startNewGame}
+            className="w-full h-12 font-light tracking-wide button-hover-effect"
+          >
+            Start Adventure
+          </Button>
+        </div>
+      </div>
+    );
   }
 
   return (
