@@ -62,9 +62,9 @@ const GameContent: React.FC = () => {
         </p>
       </div>
       
-      <div className="flex-1 p-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="flex-1 p-6 grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-5xl mx-auto">
         <div className={cn(
-          "w-full h-[calc(100vh-15rem)] min-h-[400px] transition-all duration-500 flex flex-col",
+          "w-full h-[calc(75vh-15rem)] min-h-[350px] transition-all duration-500 flex flex-col",
         )}>
           <div className="flex-1 shadow-glow rounded-xl overflow-hidden">
             <StreetView className="w-full h-full" />
@@ -86,14 +86,12 @@ const GameContent: React.FC = () => {
         </div>
         
         <div className={cn(
-          "w-full h-[calc(100vh-15rem)] min-h-[400px] transition-all duration-500",
+          "w-full h-[calc(75vh-15rem)] min-h-[350px] transition-all duration-500",
           "shadow-glow rounded-xl"
         )}>
           <MapSelector className="w-full h-full" />
         </div>
       </div>
-      
-      <ResultModal />
     </div>
   );
 };
@@ -109,3 +107,4 @@ const Index: React.FC = () => {
 };
 
 export default Index;
+
