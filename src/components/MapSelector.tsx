@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useGame } from "@/context/GameContext";
@@ -27,35 +26,14 @@ const MapSelector: React.FC<MapSelectorProps> = ({ className }) => {
   const mapRef = useRef<HTMLDivElement>(null);
   const googleMapRef = useRef<google.maps.Map | null>(null);
   const markerRef = useRef<google.maps.Marker | null>(null);
+  const scriptLoadedRef = useRef(false);
   
   const [isGuessReady, setIsGuessReady] = useState(false);
   const [isCalculating, setIsCalculating] = useState(false);
 
   // Initialize Google Maps when component mounts
   useEffect(() => {
-    if (!apiKey || !mapRef.current || gameState !== "playing" || loadingMaps) return;
-
-    const loadMapsScript = () => {
-      setLoadingMaps(true);
-      
-      // Check if Google Maps API is already loaded
-      if (window.google && window.google.maps) {
-        initializeMap();
-        return;
-      }
-
-      // Create and load the script
-      const script = document.createElement("script");
-      script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`;
-      script.async = true;
-      script.defer = true;
-      script.onload = initializeMap;
-      script.onerror = () => {
-        console.error("Failed to load Google Maps API");
-        setLoadingMaps(false);
-      };
-      document.head.appendChild(script);
-    };
+    if (!apiKey || !mapRef.current || gameState !== "playing") return;
 
     const initializeMap = () => {
       if (!mapRef.current) return;
@@ -122,8 +100,43 @@ const MapSelector: React.FC<MapSelectorProps> = ({ className }) => {
       }
     };
 
+    const loadMapsScript = () => {
+      // If Maps API is already loaded, initialize the map
+      if (window.google && window.google.maps) {
+        initializeMap();
+        return;
+      }
+      
+      // If script is already being loaded, wait for it
+      if (scriptLoadedRef.current) {
+        const checkGoogleMapsInterval = setInterval(() => {
+          if (window.google && window.google.maps) {
+            clearInterval(checkGoogleMapsInterval);
+            initializeMap();
+          }
+        }, 100);
+        return;
+      }
+      
+      // Otherwise load the script
+      setLoadingMaps(true);
+      scriptLoadedRef.current = true;
+      
+      const script = document.createElement("script");
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&loading=async`;
+      script.async = true;
+      script.defer = true;
+      script.onload = initializeMap;
+      script.onerror = () => {
+        console.error("Failed to load Google Maps API");
+        setLoadingMaps(false);
+        scriptLoadedRef.current = false;
+      };
+      document.head.appendChild(script);
+    };
+
     loadMapsScript();
-  }, [apiKey, gameState, loadingMaps]);
+  }, [apiKey, gameState]);
 
   const handleConfirmGuess = () => {
     if (!currentLocation || !guessedLocation) return;

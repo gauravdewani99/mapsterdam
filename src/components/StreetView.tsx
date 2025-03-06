@@ -21,6 +21,7 @@ const StreetView: React.FC<StreetViewProps> = ({ className }) => {
   const mapRef = useRef<HTMLDivElement>(null);
   const streetViewRef = useRef<google.maps.StreetViewPanorama | null>(null);
   const [loadingStreetView, setLoadingStreetView] = useState(true);
+  const scriptLoadedRef = useRef(false);
 
   // Initialize Street View when component mounts
   useEffect(() => {
@@ -35,15 +36,28 @@ const StreetView: React.FC<StreetViewProps> = ({ className }) => {
         return;
       }
 
+      // If script is already being loaded, wait for it
+      if (scriptLoadedRef.current) {
+        const checkGoogleMapsInterval = setInterval(() => {
+          if (window.google && window.google.maps) {
+            clearInterval(checkGoogleMapsInterval);
+            initializeStreetView();
+          }
+        }, 100);
+        return;
+      }
+
       // Create and load the script
+      scriptLoadedRef.current = true;
       const script = document.createElement("script");
-      script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`;
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&loading=async`;
       script.async = true;
       script.defer = true;
       script.onload = initializeStreetView;
       script.onerror = () => {
         console.error("Failed to load Google Maps API");
         setLoadingMaps(false);
+        scriptLoadedRef.current = false;
       };
       document.head.appendChild(script);
     };
