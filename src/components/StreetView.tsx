@@ -30,8 +30,8 @@ const StreetView: React.FC<StreetViewProps> = ({ className }) => {
     const loadMapsScript = () => {
       setLoadingMaps(true);
       
-      // Check if Google Maps API is already loaded
-      if (window.google && window.google.maps) {
+      // Check if Google Maps API is already loaded and fully initialized
+      if (window.google && window.google.maps && window.google.maps.StreetViewPanorama) {
         initializeStreetView();
         return;
       }
@@ -39,7 +39,7 @@ const StreetView: React.FC<StreetViewProps> = ({ className }) => {
       // If script is already being loaded, wait for it
       if (scriptLoadedRef.current) {
         const checkGoogleMapsInterval = setInterval(() => {
-          if (window.google && window.google.maps) {
+          if (window.google && window.google.maps && window.google.maps.StreetViewPanorama) {
             clearInterval(checkGoogleMapsInterval);
             initializeStreetView();
           }
@@ -50,10 +50,15 @@ const StreetView: React.FC<StreetViewProps> = ({ className }) => {
       // Create and load the script
       scriptLoadedRef.current = true;
       const script = document.createElement("script");
-      script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&loading=async`;
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`;
       script.async = true;
       script.defer = true;
-      script.onload = initializeStreetView;
+      
+      script.onload = () => {
+        // Add a small delay to ensure API is fully initialized
+        setTimeout(initializeStreetView, 100);
+      };
+      
       script.onerror = () => {
         console.error("Failed to load Google Maps API");
         setLoadingMaps(false);
@@ -63,7 +68,11 @@ const StreetView: React.FC<StreetViewProps> = ({ className }) => {
     };
 
     const initializeStreetView = () => {
-      if (!mapRef.current) return;
+      if (!mapRef.current || !window.google || !window.google.maps || !window.google.maps.StreetViewPanorama) {
+        console.error("Google Maps API not fully loaded yet");
+        setLoadingMaps(false);
+        return;
+      }
 
       setLoadingStreetView(true);
       
@@ -72,7 +81,7 @@ const StreetView: React.FC<StreetViewProps> = ({ className }) => {
         const randomLocation = getRandomLocation();
         
         // Initialize StreetView panorama
-        const panorama = new google.maps.StreetViewPanorama(mapRef.current, {
+        const panorama = new window.google.maps.StreetViewPanorama(mapRef.current, {
           position: randomLocation,
           pov: { heading: 0, pitch: 0 },
           zoom: 1,

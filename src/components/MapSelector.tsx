@@ -1,3 +1,4 @@
+
 import React, { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useGame } from "@/context/GameContext";
@@ -36,14 +37,18 @@ const MapSelector: React.FC<MapSelectorProps> = ({ className }) => {
     if (!apiKey || !mapRef.current || gameState !== "playing") return;
 
     const initializeMap = () => {
-      if (!mapRef.current) return;
+      if (!mapRef.current || !window.google || !window.google.maps || !window.google.maps.Map) {
+        console.error("Google Maps API not fully loaded yet");
+        setLoadingMaps(false);
+        return;
+      }
       
       try {
         // Initialize the map centered on a neutral location (world view)
-        const mapOptions: google.maps.MapOptions = {
+        const mapOptions = {
           center: { lat: 20, lng: 0 },
           zoom: 2,
-          mapTypeId: google.maps.MapTypeId.ROADMAP,
+          mapTypeId: window.google.maps.MapTypeId.ROADMAP,
           disableDefaultUI: true,
           zoomControl: true,
           fullscreenControl: false,
@@ -58,11 +63,11 @@ const MapSelector: React.FC<MapSelectorProps> = ({ className }) => {
           ]
         };
 
-        const map = new google.maps.Map(mapRef.current, mapOptions);
+        const map = new window.google.maps.Map(mapRef.current, mapOptions);
         googleMapRef.current = map;
 
         // Add click listener to place a marker
-        map.addListener("click", (e: google.maps.MapMouseEvent) => {
+        map.addListener("click", (e) => {
           if (!e.latLng) return;
           
           // Remove existing marker if any
@@ -71,12 +76,12 @@ const MapSelector: React.FC<MapSelectorProps> = ({ className }) => {
           }
           
           // Create new marker
-          const marker = new google.maps.Marker({
+          const marker = new window.google.maps.Marker({
             position: e.latLng,
             map: map,
-            animation: google.maps.Animation.DROP,
+            animation: window.google.maps.Animation.DROP,
             icon: {
-              path: google.maps.SymbolPath.CIRCLE,
+              path: window.google.maps.SymbolPath.CIRCLE,
               scale: 10,
               fillColor: "#3b82f6",
               fillOpacity: 1,
@@ -101,8 +106,8 @@ const MapSelector: React.FC<MapSelectorProps> = ({ className }) => {
     };
 
     const loadMapsScript = () => {
-      // If Maps API is already loaded, initialize the map
-      if (window.google && window.google.maps) {
+      // Check if Google Maps API is already loaded and fully initialized
+      if (window.google && window.google.maps && window.google.maps.Map) {
         initializeMap();
         return;
       }
@@ -110,7 +115,7 @@ const MapSelector: React.FC<MapSelectorProps> = ({ className }) => {
       // If script is already being loaded, wait for it
       if (scriptLoadedRef.current) {
         const checkGoogleMapsInterval = setInterval(() => {
-          if (window.google && window.google.maps) {
+          if (window.google && window.google.maps && window.google.maps.Map) {
             clearInterval(checkGoogleMapsInterval);
             initializeMap();
           }
@@ -123,10 +128,15 @@ const MapSelector: React.FC<MapSelectorProps> = ({ className }) => {
       scriptLoadedRef.current = true;
       
       const script = document.createElement("script");
-      script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&loading=async`;
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`;
       script.async = true;
       script.defer = true;
-      script.onload = initializeMap;
+      
+      script.onload = () => {
+        // Add a small delay to ensure API is fully initialized
+        setTimeout(initializeMap, 100);
+      };
+      
       script.onerror = () => {
         console.error("Failed to load Google Maps API");
         setLoadingMaps(false);
