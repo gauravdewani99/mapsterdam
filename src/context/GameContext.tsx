@@ -90,10 +90,18 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   }, []);
 
   const startNewGame = () => {
-    setCurrentLocation(null);
     setGuessedLocation(null);
     setDistance(null);
-    setGameState("playing");
+    
+    // If we're already in playing state but want a new location,
+    // set currentLocation to null to trigger re-initialization of Street View
+    if (gameState === "playing") {
+      setCurrentLocation(null);
+    } else {
+      setCurrentLocation(null);
+      setGameState("playing");
+    }
+    
     setIsWinner(false);
   };
 

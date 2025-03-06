@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useGame } from "@/context/GameContext";
-import { Search, X } from "lucide-react";
+import { Search, X, MapPin } from "lucide-react";
 import { isWithinNetherlands } from "@/utils/locationUtils";
 import { cn } from "@/lib/utils";
 
@@ -92,39 +92,42 @@ const PlacesAutocomplete: React.FC<PlacesAutocompleteProps> = ({
         "relative flex items-center transition-all",
         isInvalid ? "animate-shake" : ""
       )}>
+        <div className="absolute left-3 z-10 text-gray-400">
+          <Search className="h-4 w-4" />
+        </div>
+        
         <Input
           ref={inputRef}
           type="text"
           placeholder="Search for a place in Netherlands..."
           className={cn(
-            "pr-12 neo-input transition-colors",
+            "pl-10 pr-10 neo-input transition-colors rounded-full h-11",
+            "shadow-[0_0_10px_rgba(59,130,246,0.1)] backdrop-blur-lg border-white/10",
             isInvalid ? "border-destructive text-destructive" : ""
           )}
           value={searchValue}
           onChange={(e) => setSearchValue(e.target.value)}
         />
-        <div className="absolute right-2 flex items-center">
-          {searchValue && (
+        
+        {searchValue && (
+          <div className="absolute right-3 z-10">
             <Button
               type="button"
               variant="ghost"
               size="icon"
-              className="h-6 w-6 mr-1"
+              className="h-6 w-6 text-gray-400 hover:text-white"
               onClick={handleClear}
             >
               <X className="h-4 w-4" />
             </Button>
-          )}
-          <Search className={cn(
-            "h-4 w-4 opacity-70",
-            isInvalid ? "text-destructive" : ""
-          )} />
-        </div>
+          </div>
+        )}
       </div>
       
       {isInvalid && (
-        <div className="absolute right-0 -bottom-8 text-xs text-destructive font-medium animate-fade-in">
-          Invalid location: Outside the Netherlands
+        <div className="absolute right-0 -bottom-8 text-xs text-destructive font-medium animate-fade-in flex items-center">
+          <MapPin className="h-3 w-3 mr-1" />
+          <span>Invalid location: Outside the Netherlands</span>
         </div>
       )}
     </div>

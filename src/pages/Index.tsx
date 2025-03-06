@@ -55,32 +55,38 @@ const GameContent: React.FC = () => {
 
   return (
     <div className="w-full min-h-screen flex flex-col">
-      <div className="flex justify-between items-center px-6 py-4">
+      <div className="flex flex-col items-center px-6 py-4">
         <h1 className="text-2xl font-light tracking-tight text-white">GeoQuest <span className="text-primary">Netherlands</span></h1>
-        
-        {gameState === "playing" && (
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={startNewGame}
-            className="font-light dark-button"
-          >
-            <RefreshCw size={14} className="mr-2" />
-            New Location
-          </Button>
-        )}
+        <p className="text-muted-foreground mt-1 text-center text-sm max-w-md">
+          Explore Dutch streets in Street View and pin your guess on the map. How close can you get?
+        </p>
       </div>
       
       <div className="flex-1 p-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className={cn(
-          "w-full h-[calc(100vh-12rem)] min-h-[400px] transition-all duration-500",
-          "shadow-glow rounded-xl"
+          "w-full h-[calc(100vh-15rem)] min-h-[400px] transition-all duration-500 flex flex-col",
         )}>
-          <StreetView className="w-full h-full" />
+          <div className="flex-1 shadow-glow rounded-xl overflow-hidden">
+            <StreetView className="w-full h-full" />
+          </div>
+          
+          {gameState === "playing" && (
+            <div className="mt-4 flex justify-center">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={startNewGame}
+                className="font-light dark-button"
+              >
+                <RefreshCw size={14} className="mr-2" />
+                New Location
+              </Button>
+            </div>
+          )}
         </div>
         
         <div className={cn(
-          "w-full h-[calc(100vh-12rem)] min-h-[400px] transition-all duration-500",
+          "w-full h-[calc(100vh-15rem)] min-h-[400px] transition-all duration-500",
           "shadow-glow rounded-xl"
         )}>
           <MapSelector className="w-full h-full" />

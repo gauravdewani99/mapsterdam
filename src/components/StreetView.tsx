@@ -23,6 +23,31 @@ const StreetView: React.FC<StreetViewProps> = ({ className }) => {
   const [loadingStreetView, setLoadingStreetView] = useState(true);
   const scriptLoadedRef = useRef(false);
 
+  // Function to load a new random location
+  const loadRandomLocation = () => {
+    if (!streetViewRef.current || gameState !== "playing") return;
+    
+    setLoadingStreetView(true);
+    const randomLocation = getRandomLocation();
+    
+    try {
+      streetViewRef.current.setPosition(randomLocation);
+      setCurrentLocation(randomLocation);
+      setLoadingStreetView(false);
+    } catch (error) {
+      console.error("Error setting new Street View location:", error);
+      setLoadingStreetView(false);
+    }
+  };
+
+  // Make the function available to GameContext via the ref
+  useEffect(() => {
+    // Update the location when "New Location" is clicked
+    if (gameState === "playing" && !currentLocation && streetViewRef.current) {
+      loadRandomLocation();
+    }
+  }, [gameState, currentLocation]);
+
   // Initialize Street View when component mounts
   useEffect(() => {
     if (!apiKey || !mapRef.current || gameState !== "playing") return;

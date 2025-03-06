@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useGame } from "@/context/GameContext";
@@ -34,7 +33,6 @@ const MapSelector: React.FC<MapSelectorProps> = ({ className }) => {
   const [isCalculating, setIsCalculating] = useState(false);
   const [invalidLocation, setInvalidLocation] = useState(false);
 
-  // Initialize Google Maps when component mounts
   useEffect(() => {
     if (!apiKey || !mapRef.current || gameState !== "playing") return;
 
@@ -46,9 +44,8 @@ const MapSelector: React.FC<MapSelectorProps> = ({ className }) => {
       }
       
       try {
-        // Initialize the map centered on the Netherlands
         const mapOptions = {
-          center: { lat: 52.1326, lng: 5.2913 }, // Center of the Netherlands
+          center: { lat: 52.1326, lng: 5.2913 },
           zoom: 7,
           mapTypeId: window.google.maps.MapTypeId.ROADMAP,
           disableDefaultUI: true,
@@ -150,7 +147,6 @@ const MapSelector: React.FC<MapSelectorProps> = ({ className }) => {
         const map = new window.google.maps.Map(mapRef.current, mapOptions);
         googleMapRef.current = map;
 
-        // Draw the Netherlands border
         const netherlandsBounds = {
           north: 53.7253,
           south: 50.7503,
@@ -176,7 +172,6 @@ const MapSelector: React.FC<MapSelectorProps> = ({ className }) => {
         
         netherlandsBorder.setMap(map);
 
-        // Add click listener to place a marker
         map.addListener("click", (e) => {
           if (!e.latLng) return;
           
@@ -185,19 +180,16 @@ const MapSelector: React.FC<MapSelectorProps> = ({ className }) => {
             lng: e.latLng.lng()
           };
           
-          // Check if the clicked location is within the Netherlands
           if (!isWithinNetherlands(clickedLocation)) {
             setInvalidLocation(true);
             setTimeout(() => setInvalidLocation(false), 3000);
             return;
           }
           
-          // Remove existing marker if any
           if (markerRef.current) {
             markerRef.current.setMap(null);
           }
           
-          // Create new marker
           const marker = new window.google.maps.Marker({
             position: e.latLng,
             map: map,
@@ -214,7 +206,6 @@ const MapSelector: React.FC<MapSelectorProps> = ({ className }) => {
           
           markerRef.current = marker;
           
-          // Update guess location
           setGuessedLocation(clickedLocation);
           setIsGuessReady(true);
           setInvalidLocation(false);
@@ -228,13 +219,11 @@ const MapSelector: React.FC<MapSelectorProps> = ({ className }) => {
     };
 
     const loadMapsScript = () => {
-      // Check if Google Maps API is already loaded and fully initialized
       if (window.google && window.google.maps && window.google.maps.Map) {
         initializeMap();
         return;
       }
       
-      // If script is already being loaded, wait for it
       if (scriptLoadedRef.current) {
         const checkGoogleMapsInterval = setInterval(() => {
           if (window.google && window.google.maps && window.google.maps.Map) {
@@ -245,7 +234,6 @@ const MapSelector: React.FC<MapSelectorProps> = ({ className }) => {
         return;
       }
       
-      // Otherwise load the script
       setLoadingMaps(true);
       scriptLoadedRef.current = true;
       
@@ -254,7 +242,6 @@ const MapSelector: React.FC<MapSelectorProps> = ({ className }) => {
       script.defer = true;
       
       script.onload = () => {
-        // Add a small delay to ensure API is fully initialized
         setTimeout(initializeMap, 100);
       };
       
@@ -274,10 +261,9 @@ const MapSelector: React.FC<MapSelectorProps> = ({ className }) => {
     
     setIsCalculating(true);
     
-    // Simulate calculation for better UX
     setTimeout(() => {
       const distance = calculateDistance(currentLocation, guessedLocation);
-      const isWinner = distance <= 25; // Win if within 25km (since we're focusing on smaller Netherlands)
+      const isWinner = distance <= 25;
       
       setDistance(distance);
       setIsWinner(isWinner);
@@ -289,16 +275,13 @@ const MapSelector: React.FC<MapSelectorProps> = ({ className }) => {
   const handlePlaceSelected = (location: google.maps.LatLngLiteral) => {
     if (!googleMapRef.current) return;
     
-    // Pan to the selected location
     googleMapRef.current.panTo(location);
     googleMapRef.current.setZoom(14);
     
-    // Remove existing marker if any
     if (markerRef.current) {
       markerRef.current.setMap(null);
     }
     
-    // Create new marker
     const marker = new window.google.maps.Marker({
       position: location,
       map: googleMapRef.current,
@@ -315,7 +298,6 @@ const MapSelector: React.FC<MapSelectorProps> = ({ className }) => {
     
     markerRef.current = marker;
     
-    // Update guess location
     setGuessedLocation(location);
     setIsGuessReady(true);
   };
@@ -341,11 +323,13 @@ const MapSelector: React.FC<MapSelectorProps> = ({ className }) => {
       
       {gameState === "playing" && (
         <>
-          <div className="absolute top-4 left-4 right-4 z-10 glow-panel">
-            <PlacesAutocomplete 
-              onPlaceSelected={handlePlaceSelected} 
-              className="w-full"
-            />
+          <div className="absolute top-4 left-0 right-0 z-10 flex justify-center">
+            <div className="glow-panel px-4 py-2 w-full max-w-md mx-4">
+              <PlacesAutocomplete 
+                onPlaceSelected={handlePlaceSelected} 
+                className="w-full"
+              />
+            </div>
           </div>
           
           <div className="absolute bottom-4 right-4 z-10 neo-blur p-4 flex flex-col gap-3">
