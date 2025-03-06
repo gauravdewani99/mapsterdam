@@ -7,7 +7,7 @@ import StreetView from "@/components/StreetView";
 import MapSelector from "@/components/MapSelector";
 import ResultModal from "@/components/ResultModal";
 import { Button } from "@/components/ui/button";
-import { RefreshCw } from "lucide-react";
+import { MapPin, RefreshCw } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const GameContent: React.FC = () => {
@@ -19,7 +19,7 @@ const GameContent: React.FC = () => {
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
           <div className="spinner mx-auto mb-4"></div>
-          <h2 className="text-xl font-light">Loading GeoQuest...</h2>
+          <h2 className="text-xl font-light text-white">Loading GeoQuest...</h2>
           <p className="text-muted-foreground mt-2">Connecting to Google Maps</p>
         </div>
       </div>
@@ -36,15 +36,16 @@ const GameContent: React.FC = () => {
   if (gameState === "initial") {
     return (
       <div className="flex items-center justify-center min-h-screen p-4">
-        <div className="text-center max-w-md glass-panel p-8 animate-scale-in">
-          <h1 className="text-3xl font-light mb-4">Welcome to GeoQuest</h1>
+        <div className="text-center max-w-md neo-blur p-8 animate-scale-in">
+          <h1 className="text-3xl font-light mb-4 text-white">Welcome to GeoQuest Netherlands</h1>
           <p className="text-muted-foreground mb-6">
-            Explore the world and test your geography skills. Can you guess where you are?
+            Explore the Netherlands and test your geography skills. Can you guess where you are?
           </p>
           <Button 
             onClick={startNewGame}
-            className="w-full h-12 font-light tracking-wide button-hover-effect"
+            className="w-full h-12 font-light tracking-wide button-glow"
           >
+            <MapPin className="mr-2" />
             Start Adventure
           </Button>
         </div>
@@ -55,14 +56,14 @@ const GameContent: React.FC = () => {
   return (
     <div className="w-full min-h-screen flex flex-col">
       <div className="flex justify-between items-center px-6 py-4">
-        <h1 className="text-2xl font-light tracking-tight">GeoQuest</h1>
+        <h1 className="text-2xl font-light tracking-tight text-white">GeoQuest <span className="text-primary">Netherlands</span></h1>
         
         {gameState === "playing" && (
           <Button
             variant="outline"
             size="sm"
             onClick={startNewGame}
-            className="font-light"
+            className="font-light dark-button"
           >
             <RefreshCw size={14} className="mr-2" />
             New Location
@@ -73,14 +74,14 @@ const GameContent: React.FC = () => {
       <div className="flex-1 p-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className={cn(
           "w-full h-[calc(100vh-12rem)] min-h-[400px] transition-all duration-500",
-          "shadow-lg"
+          "shadow-glow rounded-xl"
         )}>
           <StreetView className="w-full h-full" />
         </div>
         
         <div className={cn(
           "w-full h-[calc(100vh-12rem)] min-h-[400px] transition-all duration-500",
-          "shadow-lg"
+          "shadow-glow rounded-xl"
         )}>
           <MapSelector className="w-full h-full" />
         </div>
@@ -94,7 +95,7 @@ const GameContent: React.FC = () => {
 const Index: React.FC = () => {
   return (
     <GameProvider>
-      <div className="min-h-screen bg-gradient-to-br from-background to-secondary animate-fade-in">
+      <div className="min-h-screen bg-gradient-to-br from-dark-background to-dark-secondary animate-fade-in">
         <GameContent />
       </div>
     </GameProvider>

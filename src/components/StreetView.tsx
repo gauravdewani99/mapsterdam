@@ -51,7 +51,6 @@ const StreetView: React.FC<StreetViewProps> = ({ className }) => {
       scriptLoadedRef.current = true;
       const script = document.createElement("script");
       script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`;
-      script.async = true;
       script.defer = true;
       
       script.onload = () => {
@@ -77,7 +76,7 @@ const StreetView: React.FC<StreetViewProps> = ({ className }) => {
       setLoadingStreetView(true);
       
       try {
-        // Generate a random location with Street View
+        // Generate a random location with Street View in the Netherlands
         const randomLocation = getRandomLocation();
         
         // Initialize StreetView panorama
@@ -168,10 +167,10 @@ const StreetView: React.FC<StreetViewProps> = ({ className }) => {
   return (
     <div className={cn("relative overflow-hidden rounded-xl", className)}>
       {(loadingMaps || loadingStreetView) && (
-        <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/80 backdrop-blur-sm">
+        <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/50 backdrop-blur-sm">
           <div className="text-center">
             <div className="spinner mx-auto mb-3"></div>
-            <p className="text-lg font-light">Loading Street View...</p>
+            <p className="text-lg font-light text-white">Loading Street View...</p>
           </div>
         </div>
       )}
@@ -185,7 +184,7 @@ const StreetView: React.FC<StreetViewProps> = ({ className }) => {
       />
       
       {gameState === "playing" && (
-        <div className="absolute bottom-4 left-4 z-10 glass-panel px-4 py-2 text-sm">
+        <div className="absolute bottom-4 left-4 z-10 neo-blur px-4 py-2 text-sm text-white">
           <span>Navigate using arrow keys</span>
         </div>
       )}

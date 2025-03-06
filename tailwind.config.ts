@@ -25,6 +25,11 @@ export default {
 				ring: 'hsl(var(--ring))',
 				background: 'hsl(var(--background))',
 				foreground: 'hsl(var(--foreground))',
+				'dark-background': 'hsl(var(--dark-background))',
+				'dark-secondary': 'hsl(var(--dark-secondary))',
+				'dark-card': 'hsl(var(--dark-card))',
+				'dark-muted': 'hsl(var(--dark-muted))',
+				'dark-border': 'hsl(var(--dark-border))',
 				primary: {
 					DEFAULT: 'hsl(var(--primary))',
 					foreground: 'hsl(var(--primary-foreground))'
@@ -97,6 +102,11 @@ export default {
 				'pulse-soft': {
 					'0%, 100%': { opacity: '1' },
 					'50%': { opacity: '0.8' }
+				},
+				'shake': {
+					'0%, 100%': { transform: 'translateX(0)' },
+					'10%, 30%, 50%, 70%, 90%': { transform: 'translateX(-5px)' },
+					'20%, 40%, 60%, 80%': { transform: 'translateX(5px)' }
 				}
 			},
 			animation: {
@@ -106,7 +116,8 @@ export default {
 				'fade-out': 'fade-out 0.5s ease-out',
 				'slide-up': 'slide-up 0.5s ease-out',
 				'scale-in': 'scale-in 0.3s ease-out',
-				'pulse-soft': 'pulse-soft 2s infinite'
+				'pulse-soft': 'pulse-soft 2s infinite',
+				'shake': 'shake 0.5s ease-in-out'
 			},
 			backdropFilter: {
 				'none': 'none',

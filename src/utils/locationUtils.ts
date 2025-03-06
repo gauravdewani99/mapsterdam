@@ -1,32 +1,22 @@
 
 export const getRandomLocation = (): google.maps.LatLngLiteral => {
-  // These are coordinates with good Street View coverage
+  // These are coordinates with good Street View coverage in the Netherlands
   const locations = [
-    // North America
-    { lat: 40.7128, lng: -74.006 }, // New York
-    { lat: 34.0522, lng: -118.2437 }, // Los Angeles
-    { lat: 41.8781, lng: -87.6298 }, // Chicago
-    { lat: 49.2827, lng: -123.1207 }, // Vancouver
-    
-    // Europe
-    { lat: 51.5074, lng: -0.1278 }, // London
-    { lat: 48.8566, lng: 2.3522 }, // Paris
-    { lat: 52.5200, lng: 13.4050 }, // Berlin
-    { lat: 41.9028, lng: 12.4964 }, // Rome
-    { lat: 40.4168, lng: -3.7038 }, // Madrid
-    
-    // Asia
-    { lat: 35.6762, lng: 139.6503 }, // Tokyo
-    { lat: 22.3193, lng: 114.1694 }, // Hong Kong
-    { lat: 1.3521, lng: 103.8198 }, // Singapore
-    
-    // Australia
-    { lat: -33.8688, lng: 151.2093 }, // Sydney
-    { lat: -37.8136, lng: 144.9631 }, // Melbourne
-    
-    // South America
-    { lat: -22.9068, lng: -43.1729 }, // Rio de Janeiro
-    { lat: -34.6037, lng: -58.3816 }, // Buenos Aires
+    { lat: 52.3676, lng: 4.9041 },    // Amsterdam
+    { lat: 51.9244, lng: 4.4777 },    // Rotterdam
+    { lat: 52.0705, lng: 4.3007 },    // The Hague
+    { lat: 52.0893, lng: 5.1213 },    // Utrecht
+    { lat: 51.8125, lng: 5.8372 },    // Nijmegen
+    { lat: 53.2194, lng: 6.5665 },    // Groningen
+    { lat: 50.8513, lng: 5.6909 },    // Maastricht
+    { lat: 51.4393, lng: 5.4738 },    // Eindhoven
+    { lat: 52.5088, lng: 6.0953 },    // Zwolle
+    { lat: 52.0022, lng: 4.3736 },    // Delft
+    { lat: 52.1583, lng: 5.3889 },    // Amersfoort
+    { lat: 51.9851, lng: 5.8987 },    // Arnhem
+    { lat: 53.1750, lng: 4.8528 },    // Texel
+    { lat: 52.1582, lng: 4.4932 },    // Leiden
+    { lat: 51.5748, lng: 4.7677 },    // Breda
   ];
 
   return locations[Math.floor(Math.random() * locations.length)];
@@ -59,3 +49,22 @@ export const formatDistance = (distance: number): string => {
   }
   return `${distance} km`;
 };
+
+// Check if a location is within the Netherlands boundaries
+export const isWithinNetherlands = (location: google.maps.LatLngLiteral): boolean => {
+  // Approximate bounding box for the Netherlands
+  const netherlandsBounds = {
+    north: 53.7253, // Northern-most point
+    south: 50.7503, // Southern-most point
+    east: 7.2274,   // Eastern-most point
+    west: 3.3316    // Western-most point
+  };
+  
+  return (
+    location.lat >= netherlandsBounds.south &&
+    location.lat <= netherlandsBounds.north &&
+    location.lng >= netherlandsBounds.west &&
+    location.lng <= netherlandsBounds.east
+  );
+};
+
