@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -122,6 +121,13 @@ export default {
 					'25%': { transform: 'rotate(-1deg)' },
 					'75%': { transform: 'rotate(1deg)' }
 				},
+				'bike-ride': {
+					'0%': { transform: 'translateX(-10px) rotate(-1deg)' },
+					'25%': { transform: 'translateY(3px) rotate(1deg)' },
+					'50%': { transform: 'translateX(10px) rotate(-1deg)' },
+					'75%': { transform: 'translateY(-3px) rotate(1deg)' },
+					'100%': { transform: 'translateX(-10px) rotate(-1deg)' }
+				},
 				'canal-ripple': {
 					'0%': { transform: 'scale(0)', opacity: '1' },
 					'100%': { transform: 'scale(4)', opacity: '0' }
@@ -138,6 +144,7 @@ export default {
 				'shake': 'shake 0.5s ease-in-out',
 				// Dutch-themed animations
 				'bike-wobble': 'bike-wobble 1s ease-in-out infinite',
+				'bike-ride': 'bike-ride 8s ease-in-out infinite',
 				'canal-ripple': 'canal-ripple 1.5s ease-out'
 			},
 			backdropFilter: {

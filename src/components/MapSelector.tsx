@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useGame } from "@/context/GameContext";
@@ -46,7 +45,6 @@ const MapSelector: React.FC<MapSelectorProps> = ({ className }) => {
       }
       
       try {
-        // Amsterdam center coordinates
         const amsterdamCenter = { lat: 52.3676, lng: 4.9041 };
         
         const mapOptions = {
@@ -99,7 +97,7 @@ const MapSelector: React.FC<MapSelectorProps> = ({ className }) => {
             {
               "featureType": "road",
               "elementType": "geometry.stroke",
-              "stylers": [{ "color": "#212a37" }]
+              "stylers": [{ "color": "#212835" }]
             },
             {
               "featureType": "road",
@@ -180,13 +178,13 @@ const MapSelector: React.FC<MapSelectorProps> = ({ className }) => {
         const initialPosition = amsterdamCenter;
         
         const bikeIcon = {
-          path: "M 12,0 C 5.736,0 0.636,5.04 0.636,11.244 c 0,3.888 2.088,7.548 5.496,9.54 L 12,27 l 5.868,-6.216 c 3.408,-1.992 5.496,-5.652 5.496,-9.54 C 23.364,5.04 18.264,0 12,0 Z M 8.004,6.96 h 1.992 v 3.36 L 11.556,9 h 2.568 l 1.992,3.756 c 0.336,0.168 0.66,0.372 0.96,0.612 l 0.624,0.552 -1.128,1.884 -0.612,-0.54 c -0.756,-0.672 -1.716,-1.044 -2.712,-1.044 -0.696,0 -1.344,0.18 -1.932,0.48 L 9.12,11.424 8.004,13.38 V 6.96 Z m 5.544,1.68 h -1.884 l 1.548,2.568 h 1.884 l -1.548,-2.568 z m -1.896,6.948 c 0.972,0 1.764,0.792 1.764,1.764 0,0.972 -0.792,1.764 -1.764,1.764 -0.972,0 -1.764,-0.792 -1.764,-1.764 0,-0.972 0.792,-1.764 1.764,-1.764 z",
-          fillColor: "#8B5CF6",
+          path: "M16 5a1 1 0 0 0-1-1H5a1 1 0 0 0 0 2h10a1 1 0 0 0 1-1ZM5 9h10a1 1 0 0 0 0-2H5a1 1 0 0 0 0 2Zm10 2H5a1 1 0 0 0 0 2h10a1 1 0 1 0 0-2Zm0 4H5a1 1 0 0 0 0 2h10a1 1 0 1 0 0-2Z",
+          fillColor: "#e04e39",
           fillOpacity: 1,
           strokeColor: "#FFFFFF",
-          strokeWeight: 2,
+          strokeWeight: 1.5,
           scale: 1.5,
-          anchor: new window.google.maps.Point(12, 27)
+          anchor: new window.google.maps.Point(12, 12)
         };
         
         const marker = new window.google.maps.Marker({

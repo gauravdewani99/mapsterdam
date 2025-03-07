@@ -195,6 +195,29 @@
   }
 }
 
+/* New bike ride animation */
+@keyframes bikeRide {
+  0% {
+    transform: translateX(-10px) rotate(-1deg);
+  }
+  25% {
+    transform: translateY(3px) rotate(1deg);
+  }
+  50% {
+    transform: translateX(10px) rotate(-1deg);
+  }
+  75% {
+    transform: translateY(-3px) rotate(1deg);
+  }
+  100% {
+    transform: translateX(-10px) rotate(-1deg);
+  }
+}
+
+.animate-bike-ride {
+  animation: bikeRide 8s ease-in-out infinite;
+}
+
 .canal-ripple {
   position: relative;
   overflow: hidden;
