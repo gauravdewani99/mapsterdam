@@ -39,7 +39,9 @@ const GameContent: React.FC = () => {
           <div className="flex justify-center mb-4">
             <BikePulse size={48} />
           </div>
-          <h1 className="text-3xl font-light mb-4 text-white">Welcome to Mapsterdam</h1>
+          <h1 className="text-3xl font-light mb-4 text-white font-amsterdam">
+            Welcome to <span className="text-white">Mapster</span><span className="text-dutch-orange">dam</span>
+          </h1>
           <p className="text-muted-foreground mb-6">
             Explore the streets of Amsterdam and test your geography skills. Can you guess where you are in the city?
           </p>
@@ -61,8 +63,10 @@ const GameContent: React.FC = () => {
     <div className="w-full min-h-screen flex flex-col">
       <div className="flex flex-col items-center px-6 py-4">
         <div className="flex items-center">
-          <BikePulse size={24} className="mr-2" />
-          <h1 className="text-2xl font-light tracking-tight text-white">Mapsterdam</h1>
+          <BikePulse size={24} className="mr-2" disabled={true} />
+          <h1 className="text-2xl font-light tracking-tight text-white font-amsterdam">
+            <span className="text-white">Mapster</span><span className="text-dutch-orange">dam</span>
+          </h1>
         </div>
         <p className="text-muted-foreground mt-1 text-center text-sm max-w-md">
           Discover the streets of Amsterdam
@@ -73,6 +77,7 @@ const GameContent: React.FC = () => {
         <GlitterBorder 
           className="w-full h-[calc(100vh-15rem)] min-h-[400px] transition-all duration-500 flex flex-col relative"
           borderColor="#1e88e5"
+          disabled={true}
         >
           <div className="flex-1 rounded-xl overflow-hidden">
             <StreetView className="w-full h-full" />
@@ -84,7 +89,7 @@ const GameContent: React.FC = () => {
                 variant="canal"
                 size="sm"
                 onClick={startNewGame}
-                className="font-light canal-ripple"
+                className="font-light"
               >
                 <RefreshCw size={14} className="mr-2" />
                 New Location
@@ -104,6 +109,7 @@ const GameContent: React.FC = () => {
         <GlitterBorder 
           className="w-full h-[calc(100vh-15rem)] min-h-[400px] transition-all duration-500"
           borderColor="#e04e39"
+          disabled={true}
         >
           <MapSelector className="w-full h-full" />
         </GlitterBorder>

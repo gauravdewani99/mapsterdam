@@ -8,12 +8,14 @@ interface BikePulseProps {
   size?: number;
   color?: string;
   className?: string;
+  disabled?: boolean;
 }
 
 const BikePulse: React.FC<BikePulseProps> = ({ 
   size = 48, 
   color = '#e04e39',
-  className 
+  className,
+  disabled = false
 }) => {
   const bikeRef = React.useRef<HTMLDivElement>(null);
   
@@ -51,7 +53,11 @@ const BikePulse: React.FC<BikePulseProps> = ({
   
   return (
     <div className={cn("relative", className)} ref={bikeRef}>
-      <P5Wrapper sketch={sketch} className="absolute inset-0 z-0" />
+      <P5Wrapper 
+        sketch={sketch} 
+        className="absolute inset-0 z-0" 
+        disabled={disabled}
+      />
       <div className="relative z-10 flex items-center justify-center h-full">
         <Bike 
           className="text-dutch-orange" 

@@ -8,13 +8,15 @@ interface GlitterBorderProps {
   className?: string;
   borderColor?: string;
   glowIntensity?: number;
+  disabled?: boolean;
 }
 
 const GlitterBorder: React.FC<GlitterBorderProps> = ({ 
   children, 
   className,
   borderColor = '#e04e39',
-  glowIntensity = 15
+  glowIntensity = 15,
+  disabled = false
 }) => {
   const containerRef = React.useRef<HTMLDivElement>(null);
   const [dimensions, setDimensions] = React.useState({ width: 0, height: 0 });
@@ -184,12 +186,17 @@ const GlitterBorder: React.FC<GlitterBorderProps> = ({
   }, [dimensions, borderColor, glowIntensity]);
   
   return (
-    <div className={cn("relative", className)} ref={containerRef}>
-      <P5Wrapper 
-        sketch={sketch} 
-        className="absolute inset-0 z-0 rounded-xl pointer-events-none" 
-      />
-      <div className="relative z-10 h-full">{children}</div>
+    <div className={cn("relative rounded-xl border border-opacity-20", disabled ? "border-gray-700" : "", className)} ref={containerRef}>
+      {!disabled && (
+        <P5Wrapper 
+          sketch={sketch} 
+          className="absolute inset-0 z-0 rounded-xl pointer-events-none" 
+          disabled={disabled}
+        />
+      )}
+      <div className="relative z-10 h-full rounded-xl overflow-hidden">
+        {children}
+      </div>
     </div>
   );
 };
