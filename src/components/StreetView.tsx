@@ -336,9 +336,9 @@ const StreetView: React.FC<StreetViewProps> = ({ className }) => {
             variant="amsterdam" 
             size="lg" 
             onClick={toggleClue}
-            className="bg-black/60 backdrop-blur-sm border border-white/10 text-white hover:bg-black/80 transition-all duration-300 shadow-md canal-ripple"
+            className="font-light tracking-wide canal-ripple"
           >
-            <Sparkles className="mr-1 text-dutch-orange" />
+            <Sparkles className="mr-1" />
             <Bot className="mr-1" />
             AI Clue
           </Button>
