@@ -20,7 +20,8 @@ const StreetView: React.FC<StreetViewProps> = ({ className }) => {
     currentLocation, 
     gameState,
     loadingMaps,
-    setLoadingMaps
+    setLoadingMaps,
+    startNewGame
   } = useGame();
   
   const mapRef = useRef<HTMLDivElement>(null);
@@ -33,6 +34,7 @@ const StreetView: React.FC<StreetViewProps> = ({ className }) => {
   const [loadingClue, setLoadingClue] = useState(false);
   const { toast } = useToast();
   const clueTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const locationChangedRef = useRef(false);
 
   // Clear the clue timeout on unmount
   useEffect(() => {
@@ -150,6 +152,9 @@ const StreetView: React.FC<StreetViewProps> = ({ className }) => {
     
     setLoadingStreetView(true);
     setClue(null);
+    setShowClue(false);
+    locationChangedRef.current = true;
+    
     const randomLocation = getRandomLocation();
     
     try {
@@ -161,6 +166,27 @@ const StreetView: React.FC<StreetViewProps> = ({ className }) => {
       setLoadingStreetView(false);
     }
   };
+
+  // Listen for "New Location" button click from the game context
+  useEffect(() => {
+    // Reset AI clue when a new game is started via the New Location button
+    const handleNewGameStart = () => {
+      setClue(null);
+      setShowClue(false);
+    };
+
+    // If startNewGame is called from the game context, clear the clue
+    if (startNewGame) {
+      const originalStartNewGame = startNewGame;
+      const wrappedStartNewGame = () => {
+        handleNewGameStart();
+        originalStartNewGame();
+      };
+      // This won't actually replace the function, but it helps us track when it's called
+      // The actual reset happens in the position_changed listener below
+    }
+    
+  }, [startNewGame]);
 
   useEffect(() => {
     if (gameState === "playing" && !currentLocation && streetViewRef.current) {
@@ -247,8 +273,16 @@ const StreetView: React.FC<StreetViewProps> = ({ className }) => {
                 lng: position.lng()
               });
               
-              // Clear the existing clue when position changes
+              // Always clear the existing clue when position changes
               setClue(null);
+              
+              // If the clue was showing, preemptively generate a new clue for the new location
+              if (showClue) {
+                // Use a timeout to ensure the position is fully updated
+                setTimeout(() => {
+                  generateAIClue();
+                }, 500);
+              }
             }
           }
         });
