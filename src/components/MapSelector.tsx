@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { useGame } from "@/context/GameContext";
 import { calculateDistance, isWithinNetherlands } from "@/utils/locationUtils";
 import { cn } from "@/lib/utils";
-import { MapPin, AlertTriangle } from "lucide-react";
+import { MapPin, AlertTriangle, Move } from "lucide-react";
 import PlacesAutocomplete from "./PlacesAutocomplete";
 
 interface MapSelectorProps {
@@ -32,6 +32,7 @@ const MapSelector: React.FC<MapSelectorProps> = ({ className }) => {
   const [isGuessReady, setIsGuessReady] = useState(false);
   const [isCalculating, setIsCalculating] = useState(false);
   const [invalidLocation, setInvalidLocation] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
 
   useEffect(() => {
     if (!apiKey || !mapRef.current || gameState !== "playing") return;
@@ -172,44 +173,52 @@ const MapSelector: React.FC<MapSelectorProps> = ({ className }) => {
         
         netherlandsBorder.setMap(map);
 
-        map.addListener("click", (e) => {
-          if (!e.latLng) return;
-          
-          const clickedLocation = {
-            lat: e.latLng.lat(),
-            lng: e.latLng.lng()
-          };
-          
-          if (!isWithinNetherlands(clickedLocation)) {
-            setInvalidLocation(true);
-            setTimeout(() => setInvalidLocation(false), 3000);
-            return;
+        const initialPosition = { lat: 52.1326, lng: 5.2913 };
+        const marker = new window.google.maps.Marker({
+          position: initialPosition,
+          map: map,
+          draggable: true,
+          animation: window.google.maps.Animation.DROP,
+          icon: {
+            path: window.google.maps.SymbolPath.CIRCLE,
+            scale: 10,
+            fillColor: "#3b82f6",
+            fillOpacity: 1,
+            strokeColor: "#ffffff",
+            strokeWeight: 2
           }
-          
-          if (markerRef.current) {
-            markerRef.current.setMap(null);
-          }
-          
-          const marker = new window.google.maps.Marker({
-            position: e.latLng,
-            map: map,
-            animation: window.google.maps.Animation.DROP,
-            icon: {
-              path: window.google.maps.SymbolPath.CIRCLE,
-              scale: 10,
-              fillColor: "#3b82f6",
-              fillOpacity: 1,
-              strokeColor: "#ffffff",
-              strokeWeight: 2
-            }
-          });
-          
-          markerRef.current = marker;
-          
-          setGuessedLocation(clickedLocation);
-          setIsGuessReady(true);
-          setInvalidLocation(false);
         });
+        
+        markerRef.current = marker;
+        
+        marker.addListener('dragstart', () => {
+          setIsDragging(true);
+          setIsGuessReady(false);
+        });
+        
+        marker.addListener('dragend', () => {
+          setIsDragging(false);
+          const position = marker.getPosition();
+          if (position) {
+            const newLocation = {
+              lat: position.lat(),
+              lng: position.lng()
+            };
+            
+            if (!isWithinNetherlands(newLocation)) {
+              marker.setPosition(initialPosition);
+              setInvalidLocation(true);
+              setTimeout(() => setInvalidLocation(false), 3000);
+              return;
+            }
+            
+            setGuessedLocation(newLocation);
+            setIsGuessReady(true);
+          }
+        });
+        
+        setGuessedLocation(initialPosition);
+        setIsGuessReady(true);
         
         setLoadingMaps(false);
       } catch (error) {
@@ -273,30 +282,12 @@ const MapSelector: React.FC<MapSelectorProps> = ({ className }) => {
   };
 
   const handlePlaceSelected = (location: google.maps.LatLngLiteral) => {
-    if (!googleMapRef.current) return;
+    if (!googleMapRef.current || !markerRef.current) return;
     
     googleMapRef.current.panTo(location);
     googleMapRef.current.setZoom(14);
     
-    if (markerRef.current) {
-      markerRef.current.setMap(null);
-    }
-    
-    const marker = new window.google.maps.Marker({
-      position: location,
-      map: googleMapRef.current,
-      animation: window.google.maps.Animation.DROP,
-      icon: {
-        path: window.google.maps.SymbolPath.CIRCLE,
-        scale: 10,
-        fillColor: "#3b82f6",
-        fillOpacity: 1,
-        strokeColor: "#ffffff",
-        strokeWeight: 2
-      }
-    });
-    
-    markerRef.current = marker;
+    markerRef.current.setPosition(location);
     
     setGuessedLocation(location);
     setIsGuessReady(true);
@@ -334,8 +325,8 @@ const MapSelector: React.FC<MapSelectorProps> = ({ className }) => {
           
           <div className="absolute bottom-4 right-4 z-10 neo-blur p-4 flex flex-col gap-3">
             <div className="flex items-center gap-2 mb-1 text-sm text-white">
-              <MapPin size={16} className="text-primary" />
-              <span>Click on the map within the Netherlands</span>
+              <Move size={16} className="text-primary" />
+              <span>{isDragging ? "Release to place pin" : "Drag the pin to select your guess"}</span>
             </div>
             
             {invalidLocation && (
