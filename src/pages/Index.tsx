@@ -1,4 +1,3 @@
-
 import React from "react";
 import { GameProvider, useGame } from "@/context/GameContext";
 import ApiKeyForm from "@/components/ApiKeyForm";
@@ -63,9 +62,9 @@ const GameContent: React.FC = () => {
         </p>
       </div>
       
-      <div className="flex-1 p-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="flex-1 p-6 grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-5xl mx-auto">
         <div className={cn(
-          "w-full h-[calc(100vh-15rem)] min-h-[400px] transition-all duration-500 flex flex-col relative",
+          "w-full h-[calc(100vh-20rem)] min-h-[350px] transition-all duration-500 flex flex-col relative",
         )}>
           <div className="flex-1 shadow-glow rounded-xl overflow-hidden">
             <StreetView className="w-full h-full" />
@@ -87,7 +86,7 @@ const GameContent: React.FC = () => {
         </div>
         
         {/* Vertical separator for large screens */}
-        <div className="hidden lg:block absolute left-1/2 transform -translate-x-1/2 h-[calc(100vh-15rem)] min-h-[400px] mt-6">
+        <div className="hidden lg:block absolute left-1/2 transform -translate-x-1/2 h-[calc(100vh-20rem)] min-h-[350px] mt-6">
           <Separator orientation="vertical" className="h-full bg-gray-700/30" />
         </div>
         
@@ -97,7 +96,7 @@ const GameContent: React.FC = () => {
         </div>
         
         <div className={cn(
-          "w-full h-[calc(100vh-15rem)] min-h-[400px] transition-all duration-500",
+          "w-full h-[calc(100vh-20rem)] min-h-[350px] transition-all duration-500",
           "shadow-glow rounded-xl"
         )}>
           <MapSelector className="w-full h-full" />
