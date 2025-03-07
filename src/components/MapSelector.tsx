@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { useGame } from "@/context/GameContext";
 import { calculateDistance, isWithinAmsterdam } from "@/utils/locationUtils";
 import { cn } from "@/lib/utils";
-import { AlertTriangle, MapPin } from "lucide-react";
+import { AlertTriangle, MapPin, RefreshCw } from "lucide-react";
 import PlacesAutocomplete from "./PlacesAutocomplete";
 
 interface MapSelectorProps {
@@ -21,7 +21,8 @@ const MapSelector: React.FC<MapSelectorProps> = ({ className }) => {
     setDistance,
     setIsWinner,
     loadingMaps,
-    setLoadingMaps
+    setLoadingMaps,
+    startNewGame
   } = useGame();
 
   const mapRef = useRef<HTMLDivElement>(null);
@@ -326,31 +327,37 @@ const MapSelector: React.FC<MapSelectorProps> = ({ className }) => {
             </div>
           </div>
           
-          <div className="absolute bottom-4 right-4 z-10 neo-blur p-4 flex flex-col gap-3">
-            <div className="flex items-center gap-2 mb-1 text-sm text-white">
+          <div className="absolute top-4 right-4 z-10">
+            <Button
+              variant="canal"
+              size="sm"
+              onClick={startNewGame}
+              className="font-light canal-ripple"
+            >
+              <RefreshCw size={14} className="mr-2" />
+              New Location
+            </Button>
+          </div>
+          
+          <div className="absolute bottom-16 left-1/2 transform -translate-x-1/2 z-10 flex flex-col items-center">
+            <div className="neo-blur p-3 mb-3 flex items-center gap-2 text-sm text-white">
               <MapPin size={16} className="text-dutch-orange" />
               <span>{isDragging ? "Release to place marker" : "Drag the marker to select your guess"}</span>
             </div>
             
             {invalidLocation && (
-              <div className="flex items-center gap-2 text-xs text-destructive animate-pulse">
+              <div className="flex items-center gap-2 text-xs text-destructive animate-pulse mb-3">
                 <AlertTriangle size={14} />
                 <span>Invalid location: Outside of Amsterdam</span>
               </div>
             )}
-          </div>
-          
-          <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-10">
+            
             <Button
               onClick={handleConfirmGuess}
               disabled={!isGuessReady || isCalculating || invalidLocation}
-              className={cn(
-                "bg-black/60 backdrop-blur-sm border border-white/10 text-white",
-                "hover:bg-black/80 transition-all duration-300 shadow-md canal-ripple",
-                "font-light tracking-wide px-6"
-              )}
               variant="amsterdam"
               size="lg"
+              className="font-light tracking-wide canal-ripple"
             >
               {isCalculating ? (
                 <div className="flex items-center gap-2">

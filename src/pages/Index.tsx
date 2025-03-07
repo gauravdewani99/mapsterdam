@@ -1,3 +1,4 @@
+
 import React from "react";
 import { GameProvider, useGame } from "@/context/GameContext";
 import ApiKeyForm from "@/components/ApiKeyForm";
@@ -37,8 +38,11 @@ const GameContent: React.FC = () => {
             <MapPin className="text-dutch-orange h-12 w-12" />
           </div>
           <h1 className="text-3xl font-light mb-4 text-white">Welcome to Mapsterdam</h1>
+          <p className="text-muted-foreground mb-2">
+            Geoguesser but for Amsterdam
+          </p>
           <p className="text-muted-foreground mb-6">
-            Explore the streets of Amsterdam and test your geography skills. Can you guess where you are in the city?
+            Explore the streets of Amsterdam. Get an AI clue about the street. Guess where you are.
           </p>
           <Button 
             onClick={startNewGame}
@@ -62,7 +66,10 @@ const GameContent: React.FC = () => {
           <h1 className="text-2xl font-light tracking-tight text-white">Mapsterdam</h1>
         </div>
         <p className="text-muted-foreground mt-1 text-center text-sm max-w-md">
-          Discover the streets of Amsterdam
+          Geoguesser but for Amsterdam
+        </p>
+        <p className="text-muted-foreground text-center text-sm max-w-md">
+          Explore the streets of Amsterdam. Get an AI clue about the street. Guess where you are.
         </p>
       </div>
       
@@ -80,9 +87,9 @@ const GameContent: React.FC = () => {
                 variant="canal"
                 size="sm"
                 onClick={startNewGame}
-                className="font-light canal-ripple"
+                className="font-light canal-ripple text-xs px-2 py-1 h-8"
               >
-                <RefreshCw size={14} className="mr-2" />
+                <RefreshCw size={14} className="mr-1" />
                 New Location
               </Button>
             </div>
