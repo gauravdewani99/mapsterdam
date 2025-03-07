@@ -1,7 +1,8 @@
+
 import React, { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useGame } from "@/context/GameContext";
-import { calculateDistance, isWithinNetherlands } from "@/utils/locationUtils";
+import { calculateDistance, isWithinAmsterdam } from "@/utils/locationUtils";
 import { cn } from "@/lib/utils";
 import { AlertTriangle, Move, Bike } from "lucide-react";
 import PlacesAutocomplete from "./PlacesAutocomplete";
@@ -45,9 +46,12 @@ const MapSelector: React.FC<MapSelectorProps> = ({ className }) => {
       }
       
       try {
+        // Amsterdam center coordinates
+        const amsterdamCenter = { lat: 52.3676, lng: 4.9041 };
+        
         const mapOptions = {
-          center: { lat: 52.1326, lng: 5.2913 },
-          zoom: 7,
+          center: amsterdamCenter,
+          zoom: 12,
           mapTypeId: window.google.maps.MapTypeId.ROADMAP,
           disableDefaultUI: true,
           zoomControl: true,
@@ -148,32 +152,32 @@ const MapSelector: React.FC<MapSelectorProps> = ({ className }) => {
         const map = new window.google.maps.Map(mapRef.current, mapOptions);
         googleMapRef.current = map;
 
-        const netherlandsBounds = {
-          north: 53.7253,
-          south: 50.7503,
-          east: 7.2274,
-          west: 3.3316
+        const amsterdamBounds = {
+          north: 52.4308,
+          south: 52.3182,
+          east: 5.0219,
+          west: 4.7287
         };
         
-        const netherlandsCoords = [
-          { lat: netherlandsBounds.north, lng: netherlandsBounds.west },
-          { lat: netherlandsBounds.north, lng: netherlandsBounds.east },
-          { lat: netherlandsBounds.south, lng: netherlandsBounds.east },
-          { lat: netherlandsBounds.south, lng: netherlandsBounds.west }
+        const amsterdamCoords = [
+          { lat: amsterdamBounds.north, lng: amsterdamBounds.west },
+          { lat: amsterdamBounds.north, lng: amsterdamBounds.east },
+          { lat: amsterdamBounds.south, lng: amsterdamBounds.east },
+          { lat: amsterdamBounds.south, lng: amsterdamBounds.west }
         ];
         
-        const netherlandsBorder = new window.google.maps.Polygon({
-          paths: netherlandsCoords,
-          strokeColor: "#3b82f6",
+        const amsterdamBorder = new window.google.maps.Polygon({
+          paths: amsterdamCoords,
+          strokeColor: "#e04e39",
           strokeOpacity: 0.8,
           strokeWeight: 2,
-          fillColor: "#3b82f6",
+          fillColor: "#e04e39",
           fillOpacity: 0.05
         });
         
-        netherlandsBorder.setMap(map);
+        amsterdamBorder.setMap(map);
 
-        const initialPosition = { lat: 52.1326, lng: 5.2913 };
+        const initialPosition = amsterdamCenter;
         
         const bikeIcon = {
           path: "M 12,0 C 5.736,0 0.636,5.04 0.636,11.244 c 0,3.888 2.088,7.548 5.496,9.54 L 12,27 l 5.868,-6.216 c 3.408,-1.992 5.496,-5.652 5.496,-9.54 C 23.364,5.04 18.264,0 12,0 Z M 8.004,6.96 h 1.992 v 3.36 L 11.556,9 h 2.568 l 1.992,3.756 c 0.336,0.168 0.66,0.372 0.96,0.612 l 0.624,0.552 -1.128,1.884 -0.612,-0.54 c -0.756,-0.672 -1.716,-1.044 -2.712,-1.044 -0.696,0 -1.344,0.18 -1.932,0.48 L 9.12,11.424 8.004,13.38 V 6.96 Z m 5.544,1.68 h -1.884 l 1.548,2.568 h 1.884 l -1.548,-2.568 z m -1.896,6.948 c 0.972,0 1.764,0.792 1.764,1.764 0,0.972 -0.792,1.764 -1.764,1.764 -0.972,0 -1.764,-0.792 -1.764,-1.764 0,-0.972 0.792,-1.764 1.764,-1.764 z",
@@ -209,7 +213,7 @@ const MapSelector: React.FC<MapSelectorProps> = ({ className }) => {
               lng: position.lng()
             };
             
-            if (!isWithinNetherlands(newLocation)) {
+            if (!isWithinAmsterdam(newLocation)) {
               marker.setPosition(initialPosition);
               setInvalidLocation(true);
               setTimeout(() => setInvalidLocation(false), 3000);
@@ -336,7 +340,7 @@ const MapSelector: React.FC<MapSelectorProps> = ({ className }) => {
             {invalidLocation && (
               <div className="flex items-center gap-2 text-xs text-destructive animate-pulse">
                 <AlertTriangle size={14} />
-                <span>Invalid location: Outside the Netherlands</span>
+                <span>Invalid location: Outside of Amsterdam</span>
               </div>
             )}
             

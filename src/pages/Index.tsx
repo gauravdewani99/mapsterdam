@@ -1,4 +1,3 @@
-
 import React from "react";
 import { GameProvider, useGame } from "@/context/GameContext";
 import ApiKeyForm from "@/components/ApiKeyForm";
@@ -14,7 +13,6 @@ import { Separator } from "@/components/ui/separator";
 const GameContent: React.FC = () => {
   const { apiKey, gameState, startNewGame } = useGame();
 
-  // Show loading state
   if (gameState === "loading") {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -27,13 +25,10 @@ const GameContent: React.FC = () => {
     );
   }
 
-  // Show error state
   if (gameState === "error") {
     return <ApiKeyError />;
   }
 
-  // We no longer need this check since we're managing the API key on the backend
-  // Now we use this state to show the initial "Start Game" screen
   if (gameState === "initial") {
     return (
       <div className="flex items-center justify-center min-h-screen p-4 dutch-pattern">
@@ -43,7 +38,7 @@ const GameContent: React.FC = () => {
           </div>
           <h1 className="text-3xl font-light mb-4 text-white">Welcome to Mapsterdam</h1>
           <p className="text-muted-foreground mb-6">
-            Explore the streets of Amsterdam and test your geography skills. Can you guess where you are?
+            Explore the streets of Amsterdam and test your geography skills. Can you guess where you are in the city?
           </p>
           <Button 
             onClick={startNewGame}
@@ -67,7 +62,7 @@ const GameContent: React.FC = () => {
           <h1 className="text-2xl font-light tracking-tight text-white">Mapsterdam</h1>
         </div>
         <p className="text-muted-foreground mt-1 text-center text-sm max-w-md">
-          Geoguesser but for Amsterdam
+          Discover the streets of Amsterdam
         </p>
       </div>
       
@@ -94,12 +89,10 @@ const GameContent: React.FC = () => {
           )}
         </div>
         
-        {/* Vertical separator for large screens */}
         <div className="hidden lg:block absolute left-1/2 transform -translate-x-1/2 h-[calc(100vh-15rem)] min-h-[400px] mt-6">
           <Separator orientation="vertical" className="h-full bg-gray-700/30" />
         </div>
         
-        {/* Horizontal separator for mobile */}
         <div className="block lg:hidden w-full">
           <Separator className="bg-gray-700/30 my-2" />
         </div>

@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useGame } from "@/context/GameContext";
 import { Search, X, MapPin } from "lucide-react";
-import { isWithinNetherlands } from "@/utils/locationUtils";
+import { isWithinAmsterdam } from "@/utils/locationUtils";
 import { cn } from "@/lib/utils";
 
 interface PlacesAutocompleteProps {
@@ -25,17 +25,17 @@ const PlacesAutocomplete: React.FC<PlacesAutocompleteProps> = ({
   useEffect(() => {
     if (!apiKey || !inputRef.current || !window.google || !window.google.maps || !window.google.maps.places) return;
     
-    // Netherlands bounds for restricting search results
-    const netherlandsBounds = {
-      north: 53.7253,
-      south: 50.7503,
-      east: 7.2274,
-      west: 3.3316
+    // Amsterdam bounds for restricting search results
+    const amsterdamBounds = {
+      north: 52.4308,
+      south: 52.3182,
+      east: 5.0219,
+      west: 4.7287
     };
     
     const bounds = new window.google.maps.LatLngBounds(
-      new window.google.maps.LatLng(netherlandsBounds.south, netherlandsBounds.west),
-      new window.google.maps.LatLng(netherlandsBounds.north, netherlandsBounds.east)
+      new window.google.maps.LatLng(amsterdamBounds.south, amsterdamBounds.west),
+      new window.google.maps.LatLng(amsterdamBounds.north, amsterdamBounds.east)
     );
     
     // Initialize autocomplete
@@ -62,8 +62,8 @@ const PlacesAutocomplete: React.FC<PlacesAutocompleteProps> = ({
         lng: place.geometry.location.lng()
       };
       
-      // Check if the selected place is within the Netherlands
-      if (!isWithinNetherlands(location)) {
+      // Check if the selected place is within Amsterdam
+      if (!isWithinAmsterdam(location)) {
         setIsInvalid(true);
         setTimeout(() => setIsInvalid(false), 3000);
         return;
@@ -99,7 +99,7 @@ const PlacesAutocomplete: React.FC<PlacesAutocompleteProps> = ({
         <Input
           ref={inputRef}
           type="text"
-          placeholder="Search for a place in Netherlands..."
+          placeholder="Search for a place in Amsterdam..."
           className={cn(
             "pl-10 pr-10 neo-input transition-colors rounded-full h-11",
             "shadow-[0_0_10px_rgba(59,130,246,0.1)] backdrop-blur-lg border-white/10",
@@ -127,7 +127,7 @@ const PlacesAutocomplete: React.FC<PlacesAutocompleteProps> = ({
       {isInvalid && (
         <div className="absolute right-0 -bottom-8 text-xs text-destructive font-medium animate-fade-in flex items-center">
           <MapPin className="h-3 w-3 mr-1" />
-          <span>Invalid location: Outside the Netherlands</span>
+          <span>Invalid location: Outside of Amsterdam</span>
         </div>
       )}
     </div>

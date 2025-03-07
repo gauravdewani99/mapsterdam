@@ -1,22 +1,21 @@
-
 export const getRandomLocation = (): google.maps.LatLngLiteral => {
-  // These are coordinates with good Street View coverage in the Netherlands
+  // These are coordinates with good Street View coverage in Amsterdam
   const locations = [
-    { lat: 52.3676, lng: 4.9041 },    // Amsterdam
-    { lat: 51.9244, lng: 4.4777 },    // Rotterdam
-    { lat: 52.0705, lng: 4.3007 },    // The Hague
-    { lat: 52.0893, lng: 5.1213 },    // Utrecht
-    { lat: 51.8125, lng: 5.8372 },    // Nijmegen
-    { lat: 53.2194, lng: 6.5665 },    // Groningen
-    { lat: 50.8513, lng: 5.6909 },    // Maastricht
-    { lat: 51.4393, lng: 5.4738 },    // Eindhoven
-    { lat: 52.5088, lng: 6.0953 },    // Zwolle
-    { lat: 52.0022, lng: 4.3736 },    // Delft
-    { lat: 52.1583, lng: 5.3889 },    // Amersfoort
-    { lat: 51.9851, lng: 5.8987 },    // Arnhem
-    { lat: 53.1750, lng: 4.8528 },    // Texel
-    { lat: 52.1582, lng: 4.4932 },    // Leiden
-    { lat: 51.5748, lng: 4.7677 },    // Breda
+    { lat: 52.3676, lng: 4.9041 },    // Amsterdam Center
+    { lat: 52.3739, lng: 4.8809 },    // Jordaan
+    { lat: 52.3656, lng: 4.8907 },    // Dam Square
+    { lat: 52.3584, lng: 4.8811 },    // Museumplein
+    { lat: 52.3748, lng: 4.9200 },    // NEMO Science Museum
+    { lat: 52.3731, lng: 4.9226 },    // Artis Zoo
+    { lat: 52.3769, lng: 4.8983 },    // Central Station
+    { lat: 52.3581, lng: 4.8728 },    // Vondelpark
+    { lat: 52.3756, lng: 4.8866 },    // Anne Frank House
+    { lat: 52.3600, lng: 4.8852 },    // Rijksmuseum
+    { lat: 52.3702, lng: 4.8952 },    // Royal Palace
+    { lat: 52.3661, lng: 4.9158 },    // Waterlooplein
+    { lat: 52.3745, lng: 4.8889 },    // Westerkerk
+    { lat: 52.3708, lng: 4.9147 },    // Nieuwmarkt
+    { lat: 52.3650, lng: 4.9086 },    // Rembrandtplein
   ];
 
   return locations[Math.floor(Math.random() * locations.length)];
@@ -68,3 +67,20 @@ export const isWithinNetherlands = (location: google.maps.LatLngLiteral): boolea
   );
 };
 
+// Check if a location is within Amsterdam boundaries
+export const isWithinAmsterdam = (location: google.maps.LatLngLiteral): boolean => {
+  // Amsterdam bounding box
+  const amsterdamBounds = {
+    north: 52.4308, // Northern-most point
+    south: 52.3182, // Southern-most point
+    east: 5.0219,   // Eastern-most point
+    west: 4.7287    // Western-most point
+  };
+  
+  return (
+    location.lat >= amsterdamBounds.south &&
+    location.lat <= amsterdamBounds.north &&
+    location.lng >= amsterdamBounds.west &&
+    location.lng <= amsterdamBounds.east
+  );
+};
