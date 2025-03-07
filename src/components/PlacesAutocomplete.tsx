@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useGame } from "@/context/GameContext";
-import { Search, X, MapPin } from "lucide-react";
+import { Search, X, Bike } from "lucide-react";
 import { isWithinAmsterdam } from "@/utils/locationUtils";
 import { cn } from "@/lib/utils";
 
@@ -126,7 +126,7 @@ const PlacesAutocomplete: React.FC<PlacesAutocompleteProps> = ({
       
       {isInvalid && (
         <div className="absolute right-0 -bottom-8 text-xs text-destructive font-medium animate-fade-in flex items-center">
-          <MapPin className="h-3 w-3 mr-1" />
+          <Bike className="h-3 w-3 mr-1" />
           <span>Invalid location: Outside of Amsterdam</span>
         </div>
       )}

@@ -1,3 +1,4 @@
+
 import React, { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useGame } from "@/context/GameContext";
@@ -14,7 +15,7 @@ const MapSelector: React.FC<MapSelectorProps> = ({ className }) => {
   const mapRef = useRef<HTMLDivElement>(null);
   const {
     apiKey,
-    targetLocation,
+    currentLocation,
     setGuessedLocation,
     gameState,
     setGameState,
@@ -28,10 +29,10 @@ const MapSelector: React.FC<MapSelectorProps> = ({ className }) => {
   const [isCalculating, setIsCalculating] = useState(false);
   const [invalidLocation, setInvalidLocation] = useState(false);
   const [loadingMaps, setLoadingMaps] = useState(true);
-  const [hasGuessed, setHasGuessed] = useState(gameState === "finished");
+  const [hasGuessed, setHasGuessed] = useState(gameState === "result");
 
   useEffect(() => {
-    setHasGuessed(gameState === "finished");
+    setHasGuessed(gameState === "result");
   }, [gameState]);
 
   useEffect(() => {
@@ -91,7 +92,7 @@ const MapSelector: React.FC<MapSelectorProps> = ({ className }) => {
             lng: newMarker.getPosition()!.lng(),
           };
           setIsGuessReady(true);
-          if (!isWithinAmsterdam(newPos.lat, newPos.lng)) {
+          if (!isWithinAmsterdam(newPos)) {
             setInvalidLocation(true);
             setIsGuessReady(false);
           }
@@ -107,60 +108,54 @@ const MapSelector: React.FC<MapSelectorProps> = ({ className }) => {
   }, [apiKey]);
 
   useEffect(() => {
-    if (map && targetLocation && marker) {
+    if (map && currentLocation && marker) {
       const google = window.google;
       const target = new google.maps.LatLng(
-        targetLocation.latitude,
-        targetLocation.longitude
+        currentLocation.lat,
+        currentLocation.lng
       );
       map.setCenter(target);
       marker.setPosition(target);
       setIsGuessReady(true);
     }
-  }, [map, targetLocation, marker]);
+  }, [map, currentLocation, marker]);
 
   const handleConfirmGuess = async () => {
-    if (!map || !marker) return;
+    if (!map || !marker || !currentLocation) return;
 
     setIsCalculating(true);
-    setGameState("calculating");
+    setGameState("guessing");
 
     const guessedLat = marker.getPosition()!.lat();
     const guessedLng = marker.getPosition()!.lng();
 
     const distance = calculateDistance(
-      targetLocation!.latitude,
-      targetLocation!.longitude,
-      guessedLat,
-      guessedLng
+      { lat: currentLocation.lat, lng: currentLocation.lng },
+      { lat: guessedLat, lng: guessedLng }
     );
 
     setGuessedLocation({
-      latitude: guessedLat,
-      longitude: guessedLng,
+      lat: guessedLat,
+      lng: guessedLng,
       distance: distance,
     });
 
     setTimeout(() => {
       setIsCalculating(false);
-      setGameState("finished");
+      setGameState("result");
     }, 1500);
   };
 
-  const handlePlaceSelected = (
-    place: google.maps.places.PlaceResult | null
-  ) => {
-    if (!place || !map || !marker) {
+  const handlePlaceSelected = (location: google.maps.LatLngLiteral) => {
+    if (!map || !marker) {
       return;
     }
 
-    const location = place.geometry?.location;
-
     if (location) {
-      const lat = location.lat();
-      const lng = location.lng();
+      const lat = location.lat;
+      const lng = location.lng;
 
-      if (!isWithinAmsterdam(lat, lng)) {
+      if (!isWithinAmsterdam(location)) {
         setInvalidLocation(true);
         setIsGuessReady(false);
         return;
@@ -171,7 +166,7 @@ const MapSelector: React.FC<MapSelectorProps> = ({ className }) => {
       marker.setPosition({ lat: lat, lng: lng });
       setIsGuessReady(true);
     } else {
-      console.error("No location found in place:", place);
+      console.error("No location found");
     }
   };
 
@@ -195,9 +190,8 @@ const MapSelector: React.FC<MapSelectorProps> = ({ className }) => {
           {!hasGuessed && (
             <div className="absolute top-4 left-4 right-28 z-10">
               <PlacesAutocomplete
-                placeSelected={handlePlaceSelected}
-                placeholderText="Search for a location in Amsterdam..."
-                isDisabled={isCalculating}
+                onPlaceSelected={handlePlaceSelected}
+                className=""
               />
             </div>
           )}
@@ -207,7 +201,7 @@ const MapSelector: React.FC<MapSelectorProps> = ({ className }) => {
               variant="canal"
               size="sm"
               onClick={startNewGame}
-              className="font-light canal-ripple"
+              className="font-light canal-ripple text-xs px-2 py-1 h-8"
             >
               <RefreshCw size={14} className="mr-1" />
               New Location
