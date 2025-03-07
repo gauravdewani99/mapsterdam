@@ -1,10 +1,9 @@
-
 import React, { useEffect, useRef, useState } from "react";
 import { useGame } from "@/context/GameContext";
 import { getRandomLocation } from "@/utils/locationUtils";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Zap, Bot, Loader2 } from "lucide-react";
+import { Sparkles, Bot, Loader2 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -36,7 +35,6 @@ const StreetView: React.FC<StreetViewProps> = ({ className }) => {
   const clueTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const locationChangedRef = useRef(false);
 
-  // Clear the clue timeout on unmount
   useEffect(() => {
     return () => {
       if (clueTimeoutRef.current) {
@@ -58,7 +56,6 @@ const StreetView: React.FC<StreetViewProps> = ({ className }) => {
       const response = await geocoderRef.current.geocode({ location: position });
       
       if (response.results && response.results.length > 0) {
-        // Look for the street name in the address components
         const addressComponents = response.results[0].address_components;
         const routeComponent = addressComponents.find(
           component => component.types.includes('route')
@@ -68,7 +65,6 @@ const StreetView: React.FC<StreetViewProps> = ({ className }) => {
           return routeComponent.long_name;
         }
         
-        // If no street name was found, try to extract it from the formatted address
         const formattedAddress = response.results[0].formatted_address;
         const addressParts = formattedAddress.split(',');
         if (addressParts.length > 0) {
@@ -136,7 +132,6 @@ const StreetView: React.FC<StreetViewProps> = ({ className }) => {
     } else {
       setShowClue(false);
       
-      // Clear the clue after a delay to prevent flickering if the user quickly toggles the clue
       if (clueTimeoutRef.current) {
         clearTimeout(clueTimeoutRef.current);
       }
@@ -166,27 +161,6 @@ const StreetView: React.FC<StreetViewProps> = ({ className }) => {
       setLoadingStreetView(false);
     }
   };
-
-  // Listen for "New Location" button click from the game context
-  useEffect(() => {
-    // Reset AI clue when a new game is started via the New Location button
-    const handleNewGameStart = () => {
-      setClue(null);
-      setShowClue(false);
-    };
-
-    // If startNewGame is called from the game context, clear the clue
-    if (startNewGame) {
-      const originalStartNewGame = startNewGame;
-      const wrappedStartNewGame = () => {
-        handleNewGameStart();
-        originalStartNewGame();
-      };
-      // This won't actually replace the function, but it helps us track when it's called
-      // The actual reset happens in the position_changed listener below
-    }
-    
-  }, [startNewGame]);
 
   useEffect(() => {
     if (gameState === "playing" && !currentLocation && streetViewRef.current) {
@@ -259,7 +233,6 @@ const StreetView: React.FC<StreetViewProps> = ({ className }) => {
         
         streetViewRef.current = panorama;
         
-        // Initialize geocoder
         if (window.google.maps.Geocoder) {
           geocoderRef.current = new window.google.maps.Geocoder();
         }
@@ -273,12 +246,9 @@ const StreetView: React.FC<StreetViewProps> = ({ className }) => {
                 lng: position.lng()
               });
               
-              // Always clear the existing clue when position changes
               setClue(null);
               
-              // If the clue was showing, preemptively generate a new clue for the new location
               if (showClue) {
-                // Use a timeout to ensure the position is fully updated
                 setTimeout(() => {
                   generateAIClue();
                 }, 500);
@@ -366,9 +336,9 @@ const StreetView: React.FC<StreetViewProps> = ({ className }) => {
             variant="amsterdam" 
             size="lg" 
             onClick={toggleClue}
-            className="bg-gradient-to-r from-dutch-orange to-dutch-red shadow-md hover:shadow-lg transition-shadow"
+            className="bg-black/60 backdrop-blur-sm border border-white/10 text-white hover:bg-black/80 transition-all duration-300 shadow-md canal-ripple"
           >
-            <Zap className="mr-1" />
+            <Sparkles className="mr-1 text-dutch-orange" />
             <Bot className="mr-1" />
             AI Clue
           </Button>

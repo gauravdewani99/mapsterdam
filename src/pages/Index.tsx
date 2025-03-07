@@ -1,4 +1,3 @@
-
 import React from "react";
 import { GameProvider, useGame } from "@/context/GameContext";
 import ApiKeyForm from "@/components/ApiKeyForm";
@@ -7,7 +6,7 @@ import StreetView from "@/components/StreetView";
 import MapSelector from "@/components/MapSelector";
 import ResultModal from "@/components/ResultModal";
 import { Button } from "@/components/ui/button";
-import { MapPin, RefreshCw, Map, Bike } from "lucide-react";
+import { MapPin, RefreshCw, Map } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
 
@@ -35,7 +34,7 @@ const GameContent: React.FC = () => {
       <div className="flex items-center justify-center min-h-screen p-4 dutch-pattern">
         <div className="text-center max-w-md neo-blur p-8 amsterdam-fade-in">
           <div className="flex justify-center mb-4">
-            <Bike className="text-dutch-orange h-12 w-12" />
+            <MapPin className="text-dutch-orange h-12 w-12" />
           </div>
           <h1 className="text-3xl font-light mb-4 text-white">Welcome to Mapsterdam</h1>
           <p className="text-muted-foreground mb-6">
@@ -48,7 +47,7 @@ const GameContent: React.FC = () => {
             size="xl"
           >
             <MapPin className="mr-2" />
-            Start Adventure
+            Start Guessing
           </Button>
         </div>
       </div>
@@ -59,7 +58,7 @@ const GameContent: React.FC = () => {
     <div className="w-full min-h-screen flex flex-col">
       <div className="flex flex-col items-center px-6 py-4">
         <div className="flex items-center">
-          <Bike className="text-dutch-orange h-6 w-6 mr-2" />
+          <MapPin className="text-dutch-orange h-6 w-6 mr-2" />
           <h1 className="text-2xl font-light tracking-tight text-white">Mapsterdam</h1>
         </div>
         <p className="text-muted-foreground mt-1 text-center text-sm max-w-md">

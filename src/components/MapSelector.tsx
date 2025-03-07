@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { useGame } from "@/context/GameContext";
 import { calculateDistance, isWithinAmsterdam } from "@/utils/locationUtils";
 import { cn } from "@/lib/utils";
-import { AlertTriangle, Move, Bike } from "lucide-react";
+import { AlertTriangle, MapPin } from "lucide-react";
 import PlacesAutocomplete from "./PlacesAutocomplete";
 
 interface MapSelectorProps {
@@ -328,7 +328,7 @@ const MapSelector: React.FC<MapSelectorProps> = ({ className }) => {
           
           <div className="absolute bottom-4 right-4 z-10 neo-blur p-4 flex flex-col gap-3">
             <div className="flex items-center gap-2 mb-1 text-sm text-white">
-              <Bike size={16} className="text-primary" />
+              <MapPin size={16} className="text-dutch-orange" />
               <span>{isDragging ? "Release to place marker" : "Drag the marker to select your guess"}</span>
             </div>
             
@@ -338,14 +338,19 @@ const MapSelector: React.FC<MapSelectorProps> = ({ className }) => {
                 <span>Invalid location: Outside of Amsterdam</span>
               </div>
             )}
-            
+          </div>
+          
+          <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-10">
             <Button
               onClick={handleConfirmGuess}
               disabled={!isGuessReady || isCalculating || invalidLocation}
               className={cn(
-                "w-full bg-primary/90 hover:bg-primary transition-all duration-300",
-                "font-light tracking-wide button-glow"
+                "bg-black/60 backdrop-blur-sm border border-white/10 text-white",
+                "hover:bg-black/80 transition-all duration-300 shadow-md canal-ripple",
+                "font-light tracking-wide px-6"
               )}
+              variant="amsterdam"
+              size="lg"
             >
               {isCalculating ? (
                 <div className="flex items-center gap-2">
