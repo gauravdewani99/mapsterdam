@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { useGame } from "@/context/GameContext";
 import { calculateDistance, isWithinNetherlands } from "@/utils/locationUtils";
 import { cn } from "@/lib/utils";
-import { AlertTriangle, Move } from "lucide-react";
+import { AlertTriangle, Move, Bike } from "lucide-react";
 import PlacesAutocomplete from "./PlacesAutocomplete";
 
 interface MapSelectorProps {
@@ -175,13 +175,14 @@ const MapSelector: React.FC<MapSelectorProps> = ({ className }) => {
 
         const initialPosition = { lat: 52.1326, lng: 5.2913 };
         
-        const blueMarkerIcon = {
-          path: window.google.maps.SymbolPath.CIRCLE,
-          fillColor: "#3b82f6",
+        const bikeIcon = {
+          path: "M 12,0 C 5.736,0 0.636,5.04 0.636,11.244 c 0,3.888 2.088,7.548 5.496,9.54 L 12,27 l 5.868,-6.216 c 3.408,-1.992 5.496,-5.652 5.496,-9.54 C 23.364,5.04 18.264,0 12,0 Z M 8.004,6.96 h 1.992 v 3.36 L 11.556,9 h 2.568 l 1.992,3.756 c 0.336,0.168 0.66,0.372 0.96,0.612 l 0.624,0.552 -1.128,1.884 -0.612,-0.54 c -0.756,-0.672 -1.716,-1.044 -2.712,-1.044 -0.696,0 -1.344,0.18 -1.932,0.48 L 9.12,11.424 8.004,13.38 V 6.96 Z m 5.544,1.68 h -1.884 l 1.548,2.568 h 1.884 l -1.548,-2.568 z m -1.896,6.948 c 0.972,0 1.764,0.792 1.764,1.764 0,0.972 -0.792,1.764 -1.764,1.764 -0.972,0 -1.764,-0.792 -1.764,-1.764 0,-0.972 0.792,-1.764 1.764,-1.764 z",
+          fillColor: "#8B5CF6",
           fillOpacity: 1,
-          strokeColor: "#FFFFFF", 
+          strokeColor: "#FFFFFF",
           strokeWeight: 2,
-          scale: 10,
+          scale: 1.5,
+          anchor: new window.google.maps.Point(12, 27)
         };
         
         const marker = new window.google.maps.Marker({
@@ -189,7 +190,7 @@ const MapSelector: React.FC<MapSelectorProps> = ({ className }) => {
           map: map,
           draggable: true,
           animation: window.google.maps.Animation.DROP,
-          icon: blueMarkerIcon
+          icon: bikeIcon
         });
         
         markerRef.current = marker;
@@ -328,8 +329,8 @@ const MapSelector: React.FC<MapSelectorProps> = ({ className }) => {
           
           <div className="absolute bottom-4 right-4 z-10 neo-blur p-4 flex flex-col gap-3">
             <div className="flex items-center gap-2 mb-1 text-sm text-white">
-              <Move size={16} className="text-primary" />
-              <span>{isDragging ? "Release to place pin" : "Drag the pin to select your guess"}</span>
+              <Bike size={16} className="text-primary" />
+              <span>{isDragging ? "Release to place bike" : "Drag the bike to select your guess"}</span>
             </div>
             
             {invalidLocation && (
