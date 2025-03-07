@@ -1,3 +1,4 @@
+
 import React from "react";
 import { GameProvider, useGame } from "@/context/GameContext";
 import ApiKeyForm from "@/components/ApiKeyForm";
@@ -8,6 +9,7 @@ import ResultModal from "@/components/ResultModal";
 import { Button } from "@/components/ui/button";
 import { MapPin, RefreshCw } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Separator } from "@/components/ui/separator";
 
 const GameContent: React.FC = () => {
   const { apiKey, gameState, startNewGame } = useGame();
@@ -18,7 +20,7 @@ const GameContent: React.FC = () => {
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
           <div className="spinner mx-auto mb-4"></div>
-          <h2 className="text-xl font-light text-white">Loading GeoQuest...</h2>
+          <h2 className="text-xl font-light text-white">Loading Mapsterdam...</h2>
           <p className="text-muted-foreground mt-2">Connecting to Google Maps</p>
         </div>
       </div>
@@ -36,9 +38,9 @@ const GameContent: React.FC = () => {
     return (
       <div className="flex items-center justify-center min-h-screen p-4">
         <div className="text-center max-w-md neo-blur p-8 animate-scale-in">
-          <h1 className="text-3xl font-light mb-4 text-white">Welcome to GeoQuest Netherlands</h1>
+          <h1 className="text-3xl font-light mb-4 text-white">Welcome to Mapsterdam</h1>
           <p className="text-muted-foreground mb-6">
-            Explore the Netherlands and test your geography skills. Can you guess where you are?
+            Explore the streets of Amsterdam and test your geography skills. Can you guess where you are?
           </p>
           <Button 
             onClick={startNewGame}
@@ -55,22 +57,22 @@ const GameContent: React.FC = () => {
   return (
     <div className="w-full min-h-screen flex flex-col">
       <div className="flex flex-col items-center px-6 py-4">
-        <h1 className="text-2xl font-light tracking-tight text-white">GeoQuest <span className="text-primary">Netherlands</span></h1>
+        <h1 className="text-2xl font-light tracking-tight text-white">Mapsterdam <span className="text-primary"></span></h1>
         <p className="text-muted-foreground mt-1 text-center text-sm max-w-md">
-          Explore Dutch streets in Street View and pin your guess on the map. How close can you get?
+          Geoguesser but for Amsterdam
         </p>
       </div>
       
       <div className="flex-1 p-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className={cn(
-          "w-full h-[calc(100vh-15rem)] min-h-[400px] transition-all duration-500 flex flex-col",
+          "w-full h-[calc(100vh-15rem)] min-h-[400px] transition-all duration-500 flex flex-col relative",
         )}>
           <div className="flex-1 shadow-glow rounded-xl overflow-hidden">
             <StreetView className="w-full h-full" />
           </div>
           
           {gameState === "playing" && (
-            <div className="mt-4 flex justify-center">
+            <div className="absolute top-4 right-4 z-10">
               <Button
                 variant="outline"
                 size="sm"
@@ -82,6 +84,16 @@ const GameContent: React.FC = () => {
               </Button>
             </div>
           )}
+        </div>
+        
+        {/* Vertical separator for large screens */}
+        <div className="hidden lg:block absolute left-1/2 transform -translate-x-1/2 h-[calc(100vh-15rem)] min-h-[400px] mt-6">
+          <Separator orientation="vertical" className="h-full bg-gray-700/30" />
+        </div>
+        
+        {/* Horizontal separator for mobile */}
+        <div className="block lg:hidden w-full">
+          <Separator className="bg-gray-700/30 my-2" />
         </div>
         
         <div className={cn(
