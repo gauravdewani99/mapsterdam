@@ -1,10 +1,13 @@
+
 import React, { useEffect, useRef, useState } from "react";
 import { useGame } from "@/context/GameContext";
 import { getRandomLocation } from "@/utils/locationUtils";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Zap, Bot } from "lucide-react";
+import { Zap, Bot, Loader2 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 interface StreetViewProps {
   className?: string;
@@ -22,14 +25,131 @@ const StreetView: React.FC<StreetViewProps> = ({ className }) => {
   
   const mapRef = useRef<HTMLDivElement>(null);
   const streetViewRef = useRef<google.maps.StreetViewPanorama | null>(null);
+  const geocoderRef = useRef<google.maps.Geocoder | null>(null);
   const [loadingStreetView, setLoadingStreetView] = useState(true);
   const scriptLoadedRef = useRef(false);
   const [showClue, setShowClue] = useState(false);
+  const [clue, setClue] = useState<string | null>(null);
+  const [loadingClue, setLoadingClue] = useState(false);
+  const { toast } = useToast();
+  const clueTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Clear the clue timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (clueTimeoutRef.current) {
+        clearTimeout(clueTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  const fetchStreetName = async (position: google.maps.LatLng): Promise<string | null> => {
+    if (!geocoderRef.current) {
+      if (window.google && window.google.maps && window.google.maps.Geocoder) {
+        geocoderRef.current = new window.google.maps.Geocoder();
+      } else {
+        return null;
+      }
+    }
+
+    try {
+      const response = await geocoderRef.current.geocode({ location: position });
+      
+      if (response.results && response.results.length > 0) {
+        // Look for the street name in the address components
+        const addressComponents = response.results[0].address_components;
+        const routeComponent = addressComponents.find(
+          component => component.types.includes('route')
+        );
+        
+        if (routeComponent) {
+          return routeComponent.long_name;
+        }
+        
+        // If no street name was found, try to extract it from the formatted address
+        const formattedAddress = response.results[0].formatted_address;
+        const addressParts = formattedAddress.split(',');
+        if (addressParts.length > 0) {
+          return addressParts[0].trim();
+        }
+      }
+      return null;
+    } catch (error) {
+      console.error("Error fetching street name:", error);
+      return null;
+    }
+  };
+
+  const generateAIClue = async () => {
+    if (!streetViewRef.current || loadingClue) return;
+    
+    setLoadingClue(true);
+    setClue(null);
+    
+    try {
+      const position = streetViewRef.current.getPosition();
+      if (!position) {
+        setLoadingClue(false);
+        return;
+      }
+      
+      const streetName = await fetchStreetName(position);
+      if (!streetName) {
+        setClue("This area has interesting historical significance in Amsterdam.");
+        setLoadingClue(false);
+        return;
+      }
+      
+      const { data, error } = await supabase.functions.invoke('generate-clue', {
+        body: { streetName, city: "Amsterdam" }
+      });
+      
+      if (error) {
+        console.error("Error generating clue:", error);
+        setClue("This location has charming Dutch architecture typical of Amsterdam's historic areas.");
+        toast({
+          title: "Couldn't generate a clue",
+          description: "Using a generic clue instead",
+          variant: "destructive",
+        });
+      } else if (data && data.clue) {
+        setClue(data.clue);
+      } else {
+        setClue("This neighborhood is known for its typical Amsterdam charm and character.");
+      }
+    } catch (error) {
+      console.error("Error in generateAIClue:", error);
+      setClue("This spot showcases the unique blend of old and new that defines Amsterdam.");
+    } finally {
+      setLoadingClue(false);
+    }
+  };
+
+  const toggleClue = async () => {
+    if (!showClue) {
+      setShowClue(true);
+      if (!clue && !loadingClue) {
+        generateAIClue();
+      }
+    } else {
+      setShowClue(false);
+      
+      // Clear the clue after a delay to prevent flickering if the user quickly toggles the clue
+      if (clueTimeoutRef.current) {
+        clearTimeout(clueTimeoutRef.current);
+      }
+      
+      clueTimeoutRef.current = setTimeout(() => {
+        setClue(null);
+      }, 300);
+    }
+  };
 
   const loadRandomLocation = () => {
     if (!streetViewRef.current || gameState !== "playing") return;
     
     setLoadingStreetView(true);
+    setClue(null);
     const randomLocation = getRandomLocation();
     
     try {
@@ -113,6 +233,11 @@ const StreetView: React.FC<StreetViewProps> = ({ className }) => {
         
         streetViewRef.current = panorama;
         
+        // Initialize geocoder
+        if (window.google.maps.Geocoder) {
+          geocoderRef.current = new window.google.maps.Geocoder();
+        }
+        
         panorama.addListener("position_changed", () => {
           if (streetViewRef.current) {
             const position = streetViewRef.current.getPosition();
@@ -121,6 +246,9 @@ const StreetView: React.FC<StreetViewProps> = ({ className }) => {
                 lat: position.lat(),
                 lng: position.lng()
               });
+              
+              // Clear the existing clue when position changes
+              setClue(null);
             }
           }
         });
@@ -246,7 +374,14 @@ const StreetView: React.FC<StreetViewProps> = ({ className }) => {
               </Button>
             </CardHeader>
             <CardContent className="px-4 pb-3 pt-1">
-              <p className="text-white/80 text-sm">{getRandomClue()}</p>
+              {loadingClue ? (
+                <div className="flex items-center text-white/80 text-sm">
+                  <Loader2 className="animate-spin mr-2" size={14} />
+                  Generating insight about this location...
+                </div>
+              ) : (
+                <p className="text-white/80 text-sm">{clue || "This area has some interesting features typical of Amsterdam's urban design."}</p>
+              )}
             </CardContent>
           </Card>
         </div>
