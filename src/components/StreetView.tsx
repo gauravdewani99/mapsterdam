@@ -307,25 +307,6 @@ const StreetView: React.FC<StreetViewProps> = ({ className }) => {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [streetViewRef.current, gameState]);
 
-  const toggleClue = () => {
-    setShowClue(!showClue);
-  };
-
-  const getRandomClue = () => {
-    const clues = [
-      "This area is known for its historic architecture.",
-      "Look for water nearby - this might be close to a canal.",
-      "Notice the style of buildings - typical Amsterdam residential area.",
-      "This area might be close to a major landmark or tourist attraction.",
-      "The street layout here follows Amsterdam's concentric canal pattern.",
-      "This neighborhood likely has shops and cafes nearby.",
-      "The architecture suggests this is in a more modern part of the city.",
-      "This could be near one of Amsterdam's many parks or green spaces."
-    ];
-    
-    return clues[Math.floor(Math.random() * clues.length)];
-  };
-
   return (
     <div className={cn("relative overflow-hidden rounded-xl", className)}>
       {(loadingMaps || loadingStreetView) && (
