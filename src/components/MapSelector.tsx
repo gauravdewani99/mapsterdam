@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { useGame } from "@/context/GameContext";
 import { calculateDistance, isWithinNetherlands } from "@/utils/locationUtils";
 import { cn } from "@/lib/utils";
-import { AlertTriangle, Move, Bike } from "lucide-react";
+import { AlertTriangle, Move } from "lucide-react";
 import PlacesAutocomplete from "./PlacesAutocomplete";
 
 interface MapSelectorProps {
@@ -175,11 +175,13 @@ const MapSelector: React.FC<MapSelectorProps> = ({ className }) => {
 
         const initialPosition = { lat: 52.1326, lng: 5.2913 };
         
-        const customBikeIcon = {
-          url: '/lovable-uploads/f9c378eb-cf03-48ee-91de-11ac46cf37b3.png',
-          scaledSize: new window.google.maps.Size(48, 48),
-          origin: new window.google.maps.Point(0, 0),
-          anchor: new window.google.maps.Point(24, 24)
+        const blueMarkerIcon = {
+          path: window.google.maps.SymbolPath.CIRCLE,
+          fillColor: "#3b82f6",
+          fillOpacity: 1,
+          strokeColor: "#FFFFFF", 
+          strokeWeight: 2,
+          scale: 10,
         };
         
         const marker = new window.google.maps.Marker({
@@ -187,7 +189,7 @@ const MapSelector: React.FC<MapSelectorProps> = ({ className }) => {
           map: map,
           draggable: true,
           animation: window.google.maps.Animation.DROP,
-          icon: customBikeIcon
+          icon: blueMarkerIcon
         });
         
         markerRef.current = marker;
@@ -326,8 +328,8 @@ const MapSelector: React.FC<MapSelectorProps> = ({ className }) => {
           
           <div className="absolute bottom-4 right-4 z-10 neo-blur p-4 flex flex-col gap-3">
             <div className="flex items-center gap-2 mb-1 text-sm text-white">
-              <Bike size={16} className="text-primary" />
-              <span>{isDragging ? "Release to place bike" : "Drag the bike to select your guess"}</span>
+              <Move size={16} className="text-primary" />
+              <span>{isDragging ? "Release to place pin" : "Drag the pin to select your guess"}</span>
             </div>
             
             {invalidLocation && (
