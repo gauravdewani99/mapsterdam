@@ -98,66 +98,70 @@ const ResultModal: React.FC = () => {
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && startNewGame()}>
-      <DialogContent className="glass-panel border-none max-w-lg animate-scale-in">
-        <DialogHeader className="text-center">
-          <DialogTitle className="text-2xl font-light mb-2">
-            {isWinner ? "Impressive!" : "Not Quite..."}
-          </DialogTitle>
-          <DialogDescription className="text-base">
-            {isWinner 
-              ? "You have a remarkable sense of geography!"
-              : "Keep exploring and improving your geographic intuition."}
-          </DialogDescription>
-        </DialogHeader>
-        
-        <div className="flex flex-col items-center py-3 space-y-3">
-          <div 
-            className={cn(
-              "flex items-center justify-center w-16 h-16 rounded-full",
-              isWinner 
-                ? "bg-green-100/20 text-green-500" 
-                : "bg-red-100/20 text-red-500"
-            )}
-          >
-            {isWinner 
-              ? <CheckCircle size={32} /> 
-              : <XCircle size={32} />}
-          </div>
+      <DialogContent className="max-w-md p-0 overflow-hidden bg-gradient-to-br from-dark-secondary to-dark-background border-dark-border/70 shadow-lg animate-scale-in">
+        <div className="p-5 pb-4">
+          <DialogHeader className="text-center mb-2">
+            <DialogTitle className={cn(
+              "text-2xl font-light mb-1",
+              isWinner ? "text-green-400" : "text-dutch-orange"
+            )}>
+              {isWinner ? "Impressive!" : "Not Quite..."}
+            </DialogTitle>
+            <DialogDescription className="text-base text-white/80">
+              {isWinner 
+                ? "You have a remarkable sense of geography!"
+                : "Keep exploring and improving your geographic intuition."}
+            </DialogDescription>
+          </DialogHeader>
           
-          <div className="text-center mb-2">
-            <h3 className="text-xl font-medium mb-1">
-              {isWinner ? "You Won!" : "You Lost"}
-            </h3>
-            <p className="text-muted-foreground">
-              {distance !== null && (
-                <>Your guess was <span className="font-medium text-white">{formatDistance(distance)}</span> away</>
+          <div className="flex flex-col items-center py-2 space-y-3">
+            <div 
+              className={cn(
+                "flex items-center justify-center w-14 h-14 rounded-full",
+                isWinner 
+                  ? "bg-green-500/20 text-green-400" 
+                  : "bg-dutch-orange/20 text-dutch-orange"
               )}
-            </p>
-          </div>
-          
-          <div className="w-full h-48 rounded-lg overflow-hidden">
-            <div ref={mapRef} className="w-full h-full"></div>
-          </div>
-          
-          <div className="w-full flex flex-col space-y-1 text-sm text-muted-foreground mt-2">
-            <div className="flex items-center">
-              <div className="w-3 h-3 rounded-full bg-green-500 mr-2"></div>
-              <span>Actual Location</span>
+            >
+              {isWinner 
+                ? <CheckCircle size={28} /> 
+                : <XCircle size={28} />}
             </div>
-            <div className="flex items-center">
-              <div className="w-3 h-3 rounded-full bg-dutch-orange mr-2"></div>
-              <span>Your Guess</span>
+            
+            <div className="text-center">
+              <p className="text-white/90 mb-1">
+                {distance !== null && (
+                  <>Your guess was <span className="font-medium text-white">{formatDistance(distance)}</span> away</>
+                )}
+              </p>
             </div>
           </div>
         </div>
         
-        <div className="mt-2">
+        <div className="w-full h-44 relative">
+          <div ref={mapRef} className="w-full h-full"></div>
+          
+          <div className="absolute bottom-0 left-0 right-0 flex justify-between items-center p-2 px-3 bg-black/60 backdrop-blur-sm text-xs">
+            <div className="flex items-center gap-4">
+              <div className="flex items-center">
+                <div className="w-2.5 h-2.5 rounded-full bg-green-500 mr-1.5"></div>
+                <span className="text-white/80">Actual</span>
+              </div>
+              <div className="flex items-center">
+                <div className="w-2.5 h-2.5 rounded-full bg-dutch-orange mr-1.5"></div>
+                <span className="text-white/80">Your Guess</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div className="p-4 pt-3 bg-dark-secondary/70">
           <Button 
             onClick={startNewGame}
-            className="w-full bg-primary/90 hover:bg-primary button-hover-effect"
+            className="w-full bg-gradient-to-r from-dutch-orange to-dutch-red hover:bg-dutch-orange text-white transition-all"
           >
             <RefreshCw size={16} className="mr-2" />
-            New Game
+            New Adventure
           </Button>
         </div>
       </DialogContent>
