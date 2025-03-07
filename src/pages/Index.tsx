@@ -10,6 +10,8 @@ import { Button } from "@/components/ui/button";
 import { MapPin, RefreshCw, Map, Bike } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
+import BikePulse from "@/components/animations/BikePulse";
+import GlitterBorder from "@/components/animations/GlitterBorder";
 
 const GameContent: React.FC = () => {
   const { apiKey, gameState, startNewGame } = useGame();
@@ -33,9 +35,9 @@ const GameContent: React.FC = () => {
   if (gameState === "initial") {
     return (
       <div className="flex items-center justify-center min-h-screen p-4 dutch-pattern">
-        <div className="text-center max-w-md neo-blur p-8 amsterdam-fade-in">
+        <GlitterBorder className="max-w-md neo-blur p-8 amsterdam-fade-in">
           <div className="flex justify-center mb-4">
-            <Bike className="text-dutch-orange h-12 w-12 animate-bike-ride" />
+            <BikePulse size={48} />
           </div>
           <h1 className="text-3xl font-light mb-4 text-white">Welcome to Mapsterdam</h1>
           <p className="text-muted-foreground mb-6">
@@ -50,7 +52,7 @@ const GameContent: React.FC = () => {
             <MapPin className="mr-2" />
             Start Adventure
           </Button>
-        </div>
+        </GlitterBorder>
       </div>
     );
   }
@@ -59,7 +61,7 @@ const GameContent: React.FC = () => {
     <div className="w-full min-h-screen flex flex-col">
       <div className="flex flex-col items-center px-6 py-4">
         <div className="flex items-center">
-          <Bike className="text-dutch-orange h-6 w-6 mr-2 animate-bike-ride" />
+          <BikePulse size={24} className="mr-2" />
           <h1 className="text-2xl font-light tracking-tight text-white">Mapsterdam</h1>
         </div>
         <p className="text-muted-foreground mt-1 text-center text-sm max-w-md">
@@ -68,10 +70,11 @@ const GameContent: React.FC = () => {
       </div>
       
       <div className="flex-1 p-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className={cn(
-          "w-full h-[calc(100vh-15rem)] min-h-[400px] transition-all duration-500 flex flex-col relative",
-        )}>
-          <div className="flex-1 shadow-glow rounded-xl overflow-hidden">
+        <GlitterBorder 
+          className="w-full h-[calc(100vh-15rem)] min-h-[400px] transition-all duration-500 flex flex-col relative"
+          borderColor="#1e88e5"
+        >
+          <div className="flex-1 rounded-xl overflow-hidden">
             <StreetView className="w-full h-full" />
           </div>
           
@@ -88,7 +91,7 @@ const GameContent: React.FC = () => {
               </Button>
             </div>
           )}
-        </div>
+        </GlitterBorder>
         
         <div className="hidden lg:block absolute left-1/2 transform -translate-x-1/2 h-[calc(100vh-15rem)] min-h-[400px] mt-6">
           <Separator orientation="vertical" className="h-full bg-gray-700/30" />
@@ -98,12 +101,12 @@ const GameContent: React.FC = () => {
           <Separator className="bg-gray-700/30 my-2" />
         </div>
         
-        <div className={cn(
-          "w-full h-[calc(100vh-15rem)] min-h-[400px] transition-all duration-500",
-          "shadow-glow rounded-xl"
-        )}>
+        <GlitterBorder 
+          className="w-full h-[calc(100vh-15rem)] min-h-[400px] transition-all duration-500"
+          borderColor="#e04e39"
+        >
           <MapSelector className="w-full h-full" />
-        </div>
+        </GlitterBorder>
       </div>
     </div>
   );
