@@ -30,6 +30,14 @@ export default {
 				'dark-card': 'hsl(var(--dark-card))',
 				'dark-muted': 'hsl(var(--dark-muted))',
 				'dark-border': 'hsl(var(--dark-border))',
+                
+                // Dutch themed colors
+                'dutch-orange': '#e04e39',
+                'dutch-blue': '#1e88e5',
+                'dutch-red': '#c74433',
+                'dutch-yellow': '#ffc857',
+                'dutch-navy': '#1a237e',
+                
 				primary: {
 					DEFAULT: 'hsl(var(--primary))',
 					foreground: 'hsl(var(--primary-foreground))'
@@ -107,6 +115,16 @@ export default {
 					'0%, 100%': { transform: 'translateX(0)' },
 					'10%, 30%, 50%, 70%, 90%': { transform: 'translateX(-5px)' },
 					'20%, 40%, 60%, 80%': { transform: 'translateX(5px)' }
+				},
+				// Dutch-themed animations
+				'bike-wobble': {
+					'0%, 100%': { transform: 'rotate(0deg)' },
+					'25%': { transform: 'rotate(-1deg)' },
+					'75%': { transform: 'rotate(1deg)' }
+				},
+				'canal-ripple': {
+					'0%': { transform: 'scale(0)', opacity: '1' },
+					'100%': { transform: 'scale(4)', opacity: '0' }
 				}
 			},
 			animation: {
@@ -117,7 +135,10 @@ export default {
 				'slide-up': 'slide-up 0.5s ease-out',
 				'scale-in': 'scale-in 0.3s ease-out',
 				'pulse-soft': 'pulse-soft 2s infinite',
-				'shake': 'shake 0.5s ease-in-out'
+				'shake': 'shake 0.5s ease-in-out',
+				// Dutch-themed animations
+				'bike-wobble': 'bike-wobble 1s ease-in-out infinite',
+				'canal-ripple': 'canal-ripple 1.5s ease-out'
 			},
 			backdropFilter: {
 				'none': 'none',

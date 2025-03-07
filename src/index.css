@@ -1,9 +1,11 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
+    /* Dutch-inspired color palette */
     --background: 210 45% 98%;
     --foreground: 220 20% 15%;
 
@@ -13,11 +15,13 @@
     --popover: 0 0% 100%;
     --popover-foreground: 220 20% 15%;
 
-    --primary: 210 100% 55%;
+    /* Dutch orange (for primary) */
+    --primary: 16 87% 54%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 210 40% 96%;
-    --secondary-foreground: 220 20% 15%;
+    /* Dutch blue (for secondary) */
+    --secondary: 210 79% 55%;
+    --secondary-foreground: 0 0% 100%;
 
     --muted: 210 40% 94%;
     --muted-foreground: 220 15% 40%;
@@ -30,7 +34,7 @@
 
     --border: 220 15% 90%;
     --input: 220 15% 90%;
-    --ring: 210 100% 55%;
+    --ring: 16 87% 54%;
 
     /* Dark theme colors */
     --dark-background: 220 30% 10%;
@@ -72,7 +76,7 @@
 }
 
 .button-glow {
-  @apply transition-all hover:shadow-[0_0_15px_rgba(59,130,246,0.5)] hover:-translate-y-0.5;
+  @apply transition-all hover:shadow-[0_0_15px_rgba(224,78,57,0.5)] hover:-translate-y-0.5;
 }
 
 .dark-button {
@@ -93,6 +97,7 @@
          rounded-full py-3 px-5 pl-10 shadow-[0_0_15px_rgba(0,0,0,0.2)];
 }
 
+/* Enhanced animations for smoother transitions */
 .page-transition-enter {
   opacity: 0;
   transform: translateY(10px);
@@ -162,7 +167,7 @@
 .spinner {
   width: 30px;
   height: 30px;
-  border: 3px solid rgba(59, 130, 246, 0.1);
+  border: 3px solid rgba(224, 78, 57, 0.1);
   border-radius: 50%;
   border-top-color: hsl(var(--primary));
   animation: spin 1s ease-in-out infinite;
@@ -172,4 +177,63 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+/* Dutch-themed animation effects */
+.amsterdam-fade-in {
+  animation: amsterdamFadeIn 0.6s ease forwards;
+}
+
+@keyframes amsterdamFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.canal-ripple {
+  position: relative;
+  overflow: hidden;
+}
+
+.canal-ripple::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 200%;
+  height: 200%;
+  transform: translate(-50%, -50%) scale(0);
+  background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 70%);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.6s ease-out, opacity 0.6s ease-out;
+}
+
+.canal-ripple:active::after {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
+  transition: 0s;
+}
+
+/* Dutch pattern overlay */
+.dutch-pattern {
+  position: relative;
+}
+
+.dutch-pattern::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23e04e39' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  opacity: 0.5;
+  z-index: -1;
+  pointer-events: none;
 }
