@@ -177,22 +177,19 @@ const MapSelector: React.FC<MapSelectorProps> = ({ className }) => {
 
         const initialPosition = amsterdamCenter;
         
-        const bikeIcon = {
-          path: "M16 5a1 1 0 0 0-1-1H5a1 1 0 0 0 0 2h10a1 1 0 0 0 1-1ZM5 9h10a1 1 0 0 0 0-2H5a1 1 0 0 0 0 2Zm10 2H5a1 1 0 0 0 0 2h10a1 1 0 1 0 0-2Zm0 4H5a1 1 0 0 0 0 2h10a1 1 0 1 0 0-2Z",
-          fillColor: "#e04e39",
-          fillOpacity: 1,
-          strokeColor: "#FFFFFF",
-          strokeWeight: 1.5,
-          scale: 1.5,
-          anchor: new window.google.maps.Point(12, 12)
-        };
-        
         const marker = new window.google.maps.Marker({
           position: initialPosition,
           map: map,
           draggable: true,
           animation: window.google.maps.Animation.DROP,
-          icon: bikeIcon
+          icon: {
+            path: window.google.maps.SymbolPath.CIRCLE,
+            fillColor: "#e04e39",
+            fillOpacity: 1,
+            strokeColor: "#FFFFFF",
+            strokeWeight: 1.5,
+            scale: 8
+          }
         });
         
         markerRef.current = marker;
@@ -332,7 +329,7 @@ const MapSelector: React.FC<MapSelectorProps> = ({ className }) => {
           <div className="absolute bottom-4 right-4 z-10 neo-blur p-4 flex flex-col gap-3">
             <div className="flex items-center gap-2 mb-1 text-sm text-white">
               <Bike size={16} className="text-primary" />
-              <span>{isDragging ? "Release to place bike" : "Drag the bike to select your guess"}</span>
+              <span>{isDragging ? "Release to place marker" : "Drag the marker to select your guess"}</span>
             </div>
             
             {invalidLocation && (

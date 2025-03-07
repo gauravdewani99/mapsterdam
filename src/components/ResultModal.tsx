@@ -65,14 +65,14 @@ const ResultModal: React.FC = () => {
       title: "Actual Location"
     });
 
-    // Add marker for the guessed location
+    // Add marker for the guessed location - now using orange to match branding
     new window.google.maps.Marker({
       position: guessedLocation,
       map: map,
       icon: {
         path: window.google.maps.SymbolPath.CIRCLE,
         scale: 10,
-        fillColor: "#3b82f6", // blue
+        fillColor: "#e04e39", // Dutch orange
         fillOpacity: 1,
         strokeColor: "#ffffff",
         strokeWeight: 2
@@ -145,7 +145,7 @@ const ResultModal: React.FC = () => {
               <span>Actual Location</span>
             </div>
             <div className="flex items-center">
-              <div className="w-3 h-3 rounded-full bg-blue-500 mr-2"></div>
+              <div className="w-3 h-3 rounded-full bg-dutch-orange mr-2"></div>
               <span>Your Guess</span>
             </div>
           </div>
