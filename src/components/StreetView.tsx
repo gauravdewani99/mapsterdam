@@ -3,6 +3,9 @@ import React, { useEffect, useRef, useState } from "react";
 import { useGame } from "@/context/GameContext";
 import { getRandomLocation } from "@/utils/locationUtils";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Zap, Bot } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 interface StreetViewProps {
   className?: string;
@@ -22,6 +25,7 @@ const StreetView: React.FC<StreetViewProps> = ({ className }) => {
   const streetViewRef = useRef<google.maps.StreetViewPanorama | null>(null);
   const [loadingStreetView, setLoadingStreetView] = useState(true);
   const scriptLoadedRef = useRef(false);
+  const [showClue, setShowClue] = useState(false);
 
   // Function to load a new random location
   const loadRandomLocation = () => {
@@ -189,6 +193,26 @@ const StreetView: React.FC<StreetViewProps> = ({ className }) => {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [streetViewRef.current, gameState]);
 
+  const toggleClue = () => {
+    setShowClue(!showClue);
+  };
+
+  // Generate a random clue based on the location
+  const getRandomClue = () => {
+    const clues = [
+      "This area is known for its historic architecture.",
+      "Look for water nearby - this might be close to a canal.",
+      "Notice the style of buildings - typical Amsterdam residential area.",
+      "This area might be close to a major landmark or tourist attraction.",
+      "The street layout here follows Amsterdam's concentric canal pattern.",
+      "This neighborhood likely has shops and cafes nearby.",
+      "The architecture suggests this is in a more modern part of the city.",
+      "This could be near one of Amsterdam's many parks or green spaces."
+    ];
+    
+    return clues[Math.floor(Math.random() * clues.length)];
+  };
+
   return (
     <div className={cn("relative overflow-hidden rounded-xl", className)}>
       {(loadingMaps || loadingStreetView) && (
@@ -208,7 +232,38 @@ const StreetView: React.FC<StreetViewProps> = ({ className }) => {
         )}
       />
       
-      {/* Removed the "Navigate using arrow keys" text */}
+      {/* AI Clue Button */}
+      {gameState === "playing" && !loadingStreetView && (
+        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-20">
+          <Button 
+            variant="amsterdam" 
+            size="lg" 
+            onClick={toggleClue}
+            className="shadow-lg canal-ripple"
+          >
+            <Zap className="mr-1" />
+            <Bot className="mr-1" />
+            AI Clue
+          </Button>
+        </div>
+      )}
+
+      {/* AI Clue Window */}
+      {showClue && gameState === "playing" && (
+        <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-20 w-[90%] max-w-md">
+          <Card className="bg-dark-card/90 backdrop-blur-md border-dark-border">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-lg font-light flex items-center">
+                <Bot className="mr-2 text-dutch-orange" size={18} />
+                AI Location Clue
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-muted-foreground">{getRandomClue()}</p>
+            </CardContent>
+          </Card>
+        </div>
+      )}
     </div>
   );
 };
