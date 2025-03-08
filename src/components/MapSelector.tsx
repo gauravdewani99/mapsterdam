@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { useGame } from "@/context/GameContext";
 import { calculateDistance, isWithinAmsterdam } from "@/utils/locationUtils";
 import { cn } from "@/lib/utils";
-import { AlertTriangle, MapPin, RefreshCw } from "lucide-react";
+import { AlertTriangle, MapPin } from "lucide-react";
 import PlacesAutocomplete from "./PlacesAutocomplete";
 
 interface MapSelectorProps {
@@ -327,15 +327,22 @@ const MapSelector: React.FC<MapSelectorProps> = ({ className }) => {
             </div>
           </div>
           
-          <div className="absolute top-4 right-4 z-10">
+          <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-20">
             <Button
-              variant="canal"
-              size="sm"
-              onClick={startNewGame}
-              className="font-light canal-ripple"
+              onClick={handleConfirmGuess}
+              disabled={!isGuessReady || isCalculating || invalidLocation}
+              variant="amsterdam" 
+              size="lg" 
+              className="font-light tracking-wide canal-ripple"
             >
-              <RefreshCw size={14} className="mr-2" />
-              New Location
+              {isCalculating ? (
+                <div className="flex items-center gap-2">
+                  <div className="spinner !w-4 !h-4"></div>
+                  <span>Calculating...</span>
+                </div>
+              ) : (
+                "Confirm Guess"
+              )}
             </Button>
           </div>
           
@@ -351,23 +358,6 @@ const MapSelector: React.FC<MapSelectorProps> = ({ className }) => {
                 <span>Invalid location: Outside of Amsterdam</span>
               </div>
             )}
-            
-            <Button
-              onClick={handleConfirmGuess}
-              disabled={!isGuessReady || isCalculating || invalidLocation}
-              variant="amsterdam"
-              size="lg"
-              className="font-light tracking-wide canal-ripple"
-            >
-              {isCalculating ? (
-                <div className="flex items-center gap-2">
-                  <div className="spinner !w-4 !h-4"></div>
-                  <span>Calculating...</span>
-                </div>
-              ) : (
-                "Confirm Guess"
-              )}
-            </Button>
           </div>
         </>
       )}
