@@ -102,26 +102,26 @@ const ResultModal: React.FC = () => {
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && startNewGame()}>
       <DialogContent className="max-w-md p-0 overflow-hidden bg-gradient-to-br from-dark-secondary to-dark-background border-dark-border/70 shadow-lg animate-scale-in rounded-xl">
-        {/* Map display */}
-        <div className="w-full h-44 relative">
-          <div ref={mapRef} className="w-full h-full"></div>
+        {/* Map display - takes up more space in the new design */}
+        <div className="w-full h-48 relative">
+          <div ref={mapRef} className="w-full h-full rounded-t-xl"></div>
         </div>
         
-        {/* Result content - removed padding to eliminate empty space */}
-        <div className="bg-dark-secondary/80">
-          {/* Success/failure badge - tightened spacing */}
+        {/* Result content */}
+        <div className="p-5 bg-dark-secondary/80">
+          {/* Success/failure badge */}
           <div className={cn(
-            "inline-block px-3 py-1 rounded-full text-sm font-medium mt-2 ml-4",
+            "inline-block px-3 py-1 rounded-full text-sm font-medium mb-3",
             isSuccessful ? "bg-green-500/30 text-green-300" : "bg-dutch-orange/30 text-dutch-orange"
           )}>
             {isSuccessful ? "Great Guess!" : "Nice Try!"}
           </div>
           
-          {/* Main result card - tightened spacing */}
-          <Card className="bg-dark-primary/40 border-dark-border/50 mx-4 my-2 overflow-hidden">
+          {/* Main result card */}
+          <Card className="bg-dark-primary/40 border-dark-border/50 mb-4 overflow-hidden">
             <CardContent className="p-0">
               {/* Distance result */}
-              <div className="p-3 border-b border-dark-border/30">
+              <div className="p-4 border-b border-dark-border/30">
                 <div className="flex items-center justify-between">
                   <div>
                     <h3 className="text-white font-medium">Your Result</h3>
@@ -141,7 +141,7 @@ const ResultModal: React.FC = () => {
               </div>
               
               {/* Location information */}
-              <div className="p-3 flex items-start">
+              <div className="p-4 flex items-start">
                 <MapPin className="text-dutch-orange mr-2 mt-0.5 h-5 w-5 flex-shrink-0" />
                 <div>
                   <h3 className="text-white font-medium">Actual Location</h3>
@@ -151,16 +151,14 @@ const ResultModal: React.FC = () => {
             </CardContent>
           </Card>
           
-          {/* Play again button - tightened spacing */}
-          <div className="px-4 pb-4 pt-1">
-            <Button 
-              onClick={startNewGame}
-              className="w-full bg-gradient-to-r from-dutch-orange to-dutch-red hover:bg-dutch-orange text-white transition-all"
-            >
-              <RefreshCw size={16} className="mr-2" />
-              Play Again
-            </Button>
-          </div>
+          {/* Play again button */}
+          <Button 
+            onClick={startNewGame}
+            className="w-full bg-gradient-to-r from-dutch-orange to-dutch-red hover:bg-dutch-orange text-white transition-all"
+          >
+            <RefreshCw size={16} className="mr-2" />
+            Play Again
+          </Button>
         </div>
       </DialogContent>
     </Dialog>
