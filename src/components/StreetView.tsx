@@ -339,7 +339,6 @@ const StreetView: React.FC<StreetViewProps> = ({ className }) => {
             className="font-light tracking-wide canal-ripple"
           >
             <Sparkles className="mr-1" />
-            <Bot className="mr-1" />
             AI Clue
           </Button>
         </div>
