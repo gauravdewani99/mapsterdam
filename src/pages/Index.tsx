@@ -7,7 +7,7 @@ import StreetView from "@/components/StreetView";
 import MapSelector from "@/components/MapSelector";
 import ResultModal from "@/components/ResultModal";
 import { Button } from "@/components/ui/button";
-import { RefreshCw } from "lucide-react";
+import { Bike, RefreshCw } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
 
@@ -34,7 +34,9 @@ const GameContent: React.FC = () => {
     return (
       <div className="flex items-center justify-center min-h-screen p-4 dutch-pattern">
         <div className="text-center max-w-md neo-blur p-10 amsterdam-fade-in">
-          <h1 className="text-4xl font-light mb-2 text-white">Mapsterdam 🚲</h1>
+          <h1 className="text-4xl font-light mb-2 text-white flex items-center justify-center">
+            Mapsterdam <Bike className="text-dutch-orange h-7 w-7 ml-2" />
+          </h1>
           <p className="text-muted-foreground mb-6">Welcome to the GeoGuessr for Amsterdam!</p>
           <div className="text-muted-foreground mb-8 space-y-3">
             <p className="text-base">Explore the city.</p>
@@ -57,7 +59,9 @@ const GameContent: React.FC = () => {
   return (
     <div className="w-full min-h-screen flex flex-col">
       <div className="flex flex-col items-center px-6 py-5">
-        <h1 className="text-3xl font-light tracking-tight text-white">Mapsterdam 🚲</h1>
+        <h1 className="text-3xl font-light tracking-tight text-white flex items-center">
+          Mapsterdam <Bike className="text-dutch-orange h-6 w-6 ml-2" />
+        </h1>
         <p className="text-muted-foreground mt-1 mb-2">Welcome to the GeoGuessr for Amsterdam!</p>
         <div className="text-muted-foreground text-center text-base max-w-lg space-y-1">
           <p>Explore the city.</p>
