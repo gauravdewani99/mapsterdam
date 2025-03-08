@@ -38,7 +38,11 @@ const GameContent: React.FC = () => {
             Mapsterdam <Bike className="text-dutch-orange h-7 w-7 ml-2" />
           </h1>
           <p className="text-muted-foreground mb-6">Welcome to the GeoGuessr for Amsterdam!</p>
-          <p className="text-muted-foreground mb-8">Explore the city. Get an AI clue about the street you are on. Guess where you are.</p>
+          <div className="text-muted-foreground mb-8 space-y-2">
+            <p>Explore the city.</p>
+            <p>Get an AI clue about the street you are on.</p>
+            <p>Guess where you are.</p>
+          </div>
           <Button 
             onClick={startNewGame}
             className="w-full h-14 text-lg font-light tracking-wide button-glow canal-ripple"
@@ -59,8 +63,9 @@ const GameContent: React.FC = () => {
           Mapsterdam <Bike className="text-dutch-orange h-6 w-6 ml-2" />
         </h1>
         <p className="text-muted-foreground mt-1 mb-2">Welcome to the GeoGuessr for Amsterdam!</p>
-        <p className="text-muted-foreground text-center text-base max-w-lg mb-2">
-          Explore the city. Get an AI clue about the street you are on. Guess where you are.
+        <p className="text-muted-foreground text-center text-base max-w-lg mb-2 px-4">
+          Explore the city. Get an AI clue about the street you are on.<br />
+          Guess where you are.
         </p>
       </div>
       
