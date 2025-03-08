@@ -1,4 +1,3 @@
-
 import React from "react";
 import { GameProvider, useGame } from "@/context/GameContext";
 import ApiKeyForm from "@/components/ApiKeyForm";
@@ -63,9 +62,8 @@ const GameContent: React.FC = () => {
           Mapsterdam <Bike className="text-dutch-orange h-6 w-6 ml-2" />
         </h1>
         <p className="text-muted-foreground mt-1 mb-2">Welcome to the GeoGuessr for Amsterdam!</p>
-        <p className="text-muted-foreground text-center text-base max-w-lg mb-2 px-4">
-          Explore the city. Get an AI clue about the street you are on.<br />
-          Guess where you are.
+        <p className="text-muted-foreground text-center text-base max-w-lg mb-2 px-4 whitespace-nowrap overflow-x-auto">
+          Explore the city. Get an AI clue about the street you are on. Guess where you are.
         </p>
       </div>
       
