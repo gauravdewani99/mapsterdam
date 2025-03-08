@@ -1,5 +1,5 @@
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useGame } from "@/context/GameContext";
@@ -9,56 +9,16 @@ import { cn } from "@/lib/utils";
 const ResultModal: React.FC = () => {
   const { gameState, currentLocation, guessedLocation, distance, startNewGame } = useGame();
   const mapRef = useRef<HTMLDivElement>(null);
-  const [actualStreet, setActualStreet] = useState<string>("Loading...");
-  const [guessedStreet, setGuessedStreet] = useState<string>("Loading...");
   
   const isOpen = gameState === "result";
   const isSuccessful = distance !== null && distance <= 1;
   const formattedDistance = distance !== null ? `${Math.round(distance)} km` : "Calculating...";
 
-  // Function to fetch street name based on coordinates
-  const fetchStreetName = async (location: google.maps.LatLngLiteral, setter: React.Dispatch<React.SetStateAction<string>>) => {
-    if (!window.google || !window.google.maps) {
-      setter("Street name unavailable");
-      return;
-    }
-
-    try {
-      const geocoder = new window.google.maps.Geocoder();
-      
-      geocoder.geocode({ location }, (results, status) => {
-        if (status === window.google.maps.GeocoderStatus.OK && results && results.length > 0) {
-          // Look for the street name in address components
-          const addressComponents = results[0].address_components;
-          const streetComponent = addressComponents.find(
-            component => component.types.includes("route")
-          );
-          
-          if (streetComponent) {
-            setter(streetComponent.long_name);
-          } else {
-            // If no street component found, use formatted address
-            setter(results[0].formatted_address.split(',')[0]);
-          }
-        } else {
-          setter("Unknown street");
-        }
-      });
-    } catch (error) {
-      console.error("Error fetching street name:", error);
-      setter("Street name unavailable");
-    }
-  };
-
-  // Initialize the result map and fetch street names when the modal is open
+  // Initialize the result map when the modal is open
   useEffect(() => {
     if (!isOpen || !mapRef.current || !currentLocation || !guessedLocation || !window.google || !window.google.maps) {
       return;
     }
-
-    // Fetch street names
-    fetchStreetName(currentLocation, setActualStreet);
-    fetchStreetName(guessedLocation, setGuessedStreet);
 
     const map = new window.google.maps.Map(mapRef.current, {
       center: currentLocation,
@@ -172,17 +132,6 @@ const ResultModal: React.FC = () => {
                 ? "You're within 1 kilometer of the actual location!"
                 : `You missed by ${formattedDistance}`}
             </p>
-          </div>
-          
-          <div className="flex justify-between mb-3 text-sm text-white/80">
-            <div className="flex-1">
-              <p className="text-xs text-white/60 mb-0.5">Actual Location</p>
-              <p className="font-medium truncate">{actualStreet}</p>
-            </div>
-            <div className="flex-1 text-right">
-              <p className="text-xs text-white/60 mb-0.5">Your Guess</p>
-              <p className="font-medium truncate">{guessedStreet}</p>
-            </div>
           </div>
           
           <Button 
