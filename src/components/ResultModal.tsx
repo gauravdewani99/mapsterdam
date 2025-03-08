@@ -101,17 +101,17 @@ const ResultModal: React.FC = () => {
     <Dialog open={isOpen} onOpenChange={(open) => !open && startNewGame()}>
       <DialogContent className="max-w-xs p-0 overflow-hidden bg-gradient-to-br from-dark-secondary to-dark-background border-dark-border/70 shadow-lg animate-scale-in">
         <DialogTitle className="sr-only">Game Result</DialogTitle>
-        <div className="w-full h-40 relative">
+        <div className="w-full h-32 relative">
           <div ref={mapRef} className="w-full h-full"></div>
         </div>
         
-        <div className="p-3 bg-dark-secondary/70">
+        <div className="p-2.5 bg-dark-secondary/70">
           {/* Distance display with success/failure message */}
           <div className={cn(
-            "mb-3 p-2.5 rounded-md text-center",
+            "mb-2 p-2 rounded-md text-center",
             isSuccessful ? "bg-green-500/20 text-green-400" : "bg-dutch-orange/20 text-dutch-orange"
           )}>
-            <p className="font-medium mb-1">
+            <p className="font-medium mb-0.5">
               {isSuccessful ? "Great guess!" : "Nice try!"}
             </p>
             <p className="text-sm">
