@@ -1,3 +1,4 @@
+
 import React from "react";
 import { GameProvider, useGame } from "@/context/GameContext";
 import ApiKeyForm from "@/components/ApiKeyForm";
@@ -38,7 +39,9 @@ const GameContent: React.FC = () => {
           </h1>
           <p className="text-muted-foreground mb-6">Welcome to the GeoGuessr for Amsterdam!</p>
           <div className="text-muted-foreground mb-8 space-y-2">
-            <p>Explore the street. Get an AI clue. Guess where you are.</p>
+            <p>Explore the street.</p>
+            <p>Get an AI clue.</p>
+            <p>Guess where you are.</p>
           </div>
           <Button 
             onClick={startNewGame}
