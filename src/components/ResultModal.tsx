@@ -7,12 +7,14 @@ import { RefreshCw } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const ResultModal: React.FC = () => {
-  const { gameState, currentLocation, guessedLocation, startNewGame } = useGame();
+  const { gameState, currentLocation, guessedLocation, distance, startNewGame } = useGame();
   const mapRef = useRef<HTMLDivElement>(null);
   const [actualStreet, setActualStreet] = useState<string>("Loading...");
   const [guessedStreet, setGuessedStreet] = useState<string>("Loading...");
   
   const isOpen = gameState === "result";
+  const isSuccessful = distance !== null && distance <= 1;
+  const formattedDistance = distance !== null ? `${Math.round(distance)} km` : "Calculating...";
 
   // Function to fetch street name based on coordinates
   const fetchStreetName = async (location: google.maps.LatLngLiteral, setter: React.Dispatch<React.SetStateAction<string>>) => {
@@ -157,6 +159,21 @@ const ResultModal: React.FC = () => {
         </div>
         
         <div className="p-4 pt-2 bg-dark-secondary/70">
+          {/* Distance display with success/failure message */}
+          <div className={cn(
+            "mb-3 p-3 rounded-md text-center",
+            isSuccessful ? "bg-green-500/20 text-green-400" : "bg-dutch-orange/20 text-dutch-orange"
+          )}>
+            <p className="font-medium mb-1">
+              {isSuccessful ? "Great guess!" : "Nice try!"}
+            </p>
+            <p className="text-sm">
+              {isSuccessful
+                ? "You're within 1 kilometer of the actual location!"
+                : `You missed by ${formattedDistance}`}
+            </p>
+          </div>
+          
           <div className="flex justify-between mb-3 text-sm text-white/80">
             <div className="flex-1">
               <p className="text-xs text-white/60 mb-0.5">Actual Location</p>
