@@ -16,7 +16,7 @@ const ResultModal: React.FC = () => {
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && startNewGame()}>
-      <DialogContent className="max-w-xs p-0 overflow-hidden bg-gradient-to-br from-dark-secondary to-dark-background border-dark-border/70 shadow-lg animate-scale-in">
+      <DialogContent className="sm:max-w-md max-w-[90vw] w-full p-0 overflow-hidden bg-gradient-to-br from-dark-secondary to-dark-background border-dark-border/70 shadow-lg animate-scale-in">
         <DialogTitle className="sr-only">Game Result</DialogTitle>
         
         {/* Content section */}
@@ -36,13 +36,15 @@ const ResultModal: React.FC = () => {
             </p>
           </div>
           
-          {/* Location information - Now with highlighted street name and icon */}
+          {/* Location information - Improved to handle long street names */}
           <div className="mb-3 p-3 bg-dark-primary/30 rounded-md">
-            <p className="text-sm text-white/80 flex items-center justify-center whitespace-nowrap overflow-hidden text-ellipsis">
-              <span className="mr-1">The actual location was</span>
-              <MapPin size={14} className="mx-1 text-dutch-orange flex-shrink-0" />
-              <span className="font-bold text-dutch-orange truncate">{locationDisplay}</span>
-            </p>
+            <div className="flex items-center gap-1 justify-center">
+              <span className="text-sm text-white/80">The actual location was</span>
+              <MapPin size={14} className="text-dutch-orange flex-shrink-0 mx-1" />
+              <div className="font-bold text-dutch-orange text-sm max-w-full overflow-hidden">
+                <span className="line-clamp-2 text-center">{locationDisplay}</span>
+              </div>
+            </div>
           </div>
           
           {/* Play again button */}
