@@ -42,11 +42,13 @@ export const calculateDistance = (
   return Math.round(distance); // Return distance in kilometers
 };
 
-export const formatDistance = (distance: number): string => {
+export const formatDistance = (distance: number, decimals: number = 2): string => {
   if (distance < 1) {
+    // For distances less than 1km, convert to meters
     return `${Math.round(distance * 1000)} meters`;
   }
-  return `${distance} km`;
+  // Format with specified number of decimal places
+  return `${distance.toFixed(decimals)} km`;
 };
 
 // Check if a location is within the Netherlands boundaries

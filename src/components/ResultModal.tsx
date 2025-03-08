@@ -131,7 +131,7 @@ const ResultModal: React.FC = () => {
             <div className="text-center">
               <p className="text-white/90 mb-1">
                 {distance !== null && (
-                  <>Your guess was <span className="font-medium text-white">{formatDistance(distance)}</span> away</>
+                  <>Your guess was <span className="font-medium text-white">{formatDistance(distance, 2)}</span> away</>
                 )}
               </p>
             </div>
@@ -141,8 +141,8 @@ const ResultModal: React.FC = () => {
         <div className="w-full h-44 relative">
           <div ref={mapRef} className="w-full h-full"></div>
           
-          <div className="absolute bottom-0 left-0 right-0 flex justify-between items-center p-2 px-3 bg-black/60 backdrop-blur-sm text-xs">
-            <div className="flex items-center gap-4">
+          <div className="absolute top-2 right-2 bg-black/70 backdrop-blur-sm rounded-md px-2 py-1.5 text-xs">
+            <div className="flex flex-col gap-1.5">
               <div className="flex items-center">
                 <div className="w-2.5 h-2.5 rounded-full bg-green-500 mr-1.5"></div>
                 <span className="text-white/80">Actual</span>
