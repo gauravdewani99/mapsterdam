@@ -3,18 +3,13 @@ import React, { createContext, useContext, useState, ReactNode, useEffect } from
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
-// Extending the LatLngLiteral type to include distance
-interface GuessLocation extends google.maps.LatLngLiteral {
-  distance?: number;
-}
-
 interface GameContextType {
   apiKey: string;
   setApiKey: (key: string) => void;
   currentLocation: google.maps.LatLngLiteral | null;
   setCurrentLocation: (location: google.maps.LatLngLiteral | null) => void;
-  guessedLocation: GuessLocation | null;
-  setGuessedLocation: (location: GuessLocation | null) => void;
+  guessedLocation: google.maps.LatLngLiteral | null;
+  setGuessedLocation: (location: google.maps.LatLngLiteral | null) => void;
   distance: number | null;
   setDistance: (distance: number | null) => void;
   gameState: "initial" | "loading" | "playing" | "guessing" | "result" | "error";
@@ -34,7 +29,7 @@ const GameContext = createContext<GameContextType | undefined>(undefined);
 export const GameProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [apiKey, setApiKey] = useState<string>("");
   const [currentLocation, setCurrentLocation] = useState<google.maps.LatLngLiteral | null>(null);
-  const [guessedLocation, setGuessedLocation] = useState<GuessLocation | null>(null);
+  const [guessedLocation, setGuessedLocation] = useState<google.maps.LatLngLiteral | null>(null);
   const [distance, setDistance] = useState<number | null>(null);
   const [gameState, setGameState] = useState<"initial" | "loading" | "playing" | "guessing" | "result" | "error">("loading");
   const [isWinner, setIsWinner] = useState<boolean>(false);
