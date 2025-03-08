@@ -3,7 +3,7 @@ import React from "react";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useGame } from "@/context/GameContext";
-import { RefreshCw } from "lucide-react";
+import { RefreshCw, MapPin } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const ResultModal: React.FC = () => {
@@ -36,9 +36,15 @@ const ResultModal: React.FC = () => {
             </p>
           </div>
           
-          {/* Location information */}
-          <div className="mb-3 p-3 bg-dark-primary/30 rounded-md text-center text-white/80">
-            <p className="text-sm">The actual location was {locationDisplay}.</p>
+          {/* Location information - Now with highlighted street name and icon */}
+          <div className="mb-3 p-3 bg-dark-primary/30 rounded-md text-center">
+            <p className="text-sm text-white/80 flex items-center justify-center">
+              The actual location was 
+              <span className="inline-flex items-center ml-1 mr-1">
+                <MapPin size={14} className="mr-1 text-dutch-orange" />
+                <span className="font-bold text-dutch-orange">{locationDisplay}</span>
+              </span>.
+            </p>
           </div>
           
           {/* Play again button */}
