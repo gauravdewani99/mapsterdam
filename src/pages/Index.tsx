@@ -33,19 +33,20 @@ const GameContent: React.FC = () => {
   if (gameState === "initial") {
     return (
       <div className="flex items-center justify-center min-h-screen p-4 dutch-pattern">
-        <div className="text-center max-w-md neo-blur p-8 amsterdam-fade-in">
+        <div className="text-center max-w-md neo-blur p-10 amsterdam-fade-in">
           <div className="flex justify-center mb-4">
-            <Bike className="text-dutch-orange h-12 w-12" />
+            <Bike className="text-dutch-orange h-14 w-14" />
           </div>
-          <h1 className="text-3xl font-light mb-4 text-white">🚲 Mapsterdam</h1>
-          <div className="text-muted-foreground mb-6 space-y-2">
-            <p>Explore the city.</p>
-            <p>Get an AI clue about the street you are on.</p>
-            <p>Guess where you are.</p>
+          <h1 className="text-4xl font-light mb-2 text-white">🚲 Mapsterdam</h1>
+          <p className="text-lg text-dutch-orange mb-6">Welcome to the GeoGuessr for Amsterdam!</p>
+          <div className="text-muted-foreground mb-8 space-y-3">
+            <p className="text-base">Explore the city.</p>
+            <p className="text-base">Get an AI clue about the street you are on.</p>
+            <p className="text-base">Guess where you are.</p>
           </div>
           <Button 
             onClick={startNewGame}
-            className="w-full h-12 font-light tracking-wide button-glow canal-ripple"
+            className="w-full h-14 text-lg font-light tracking-wide button-glow canal-ripple"
             variant="amsterdam"
             size="xl"
           >
@@ -58,51 +59,52 @@ const GameContent: React.FC = () => {
 
   return (
     <div className="w-full min-h-screen flex flex-col">
-      <div className="flex flex-col items-center px-6 py-4">
+      <div className="flex flex-col items-center px-6 py-5">
         <div className="flex items-center">
-          <Bike className="text-dutch-orange h-6 w-6 mr-2" />
-          <h1 className="text-2xl font-light tracking-tight text-white">🚲 Mapsterdam</h1>
+          <Bike className="text-dutch-orange h-8 w-8 mr-2" />
+          <h1 className="text-3xl font-light tracking-tight text-white">🚲 Mapsterdam</h1>
         </div>
-        <div className="text-muted-foreground mt-1 text-center text-sm max-w-md space-y-1">
+        <p className="text-lg text-dutch-orange mt-1 mb-2">Welcome to the GeoGuessr for Amsterdam!</p>
+        <div className="text-muted-foreground text-center text-base max-w-lg space-y-1">
           <p>Explore the city.</p>
           <p>Get an AI clue about the street you are on.</p>
           <p>Guess where you are.</p>
         </div>
       </div>
       
-      <div className="flex-1 p-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="flex-1 p-6 grid grid-cols-1 lg:grid-cols-2 gap-8">
         <div className={cn(
-          "w-full h-[calc(100vh-15rem)] min-h-[400px] transition-all duration-500 flex flex-col relative",
+          "w-full h-[calc(100vh-16rem)] min-h-[450px] transition-all duration-500 flex flex-col relative",
         )}>
           <div className="flex-1 shadow-glow rounded-xl overflow-hidden">
             <StreetView className="w-full h-full" />
           </div>
           
           {gameState === "playing" && (
-            <div className="absolute top-4 right-4 z-10">
+            <div className="absolute top-5 right-5 z-10">
               <Button
                 variant="canal"
                 size="sm"
                 onClick={startNewGame}
-                className="font-light canal-ripple text-xs px-2 py-1 h-8"
+                className="font-light canal-ripple text-sm px-3 py-2 h-10"
               >
-                <RefreshCw size={14} className="mr-1" />
+                <RefreshCw size={16} className="mr-2" />
                 New Location
               </Button>
             </div>
           )}
         </div>
         
-        <div className="hidden lg:block absolute left-1/2 transform -translate-x-1/2 h-[calc(100vh-15rem)] min-h-[400px] mt-6">
+        <div className="hidden lg:block absolute left-1/2 transform -translate-x-1/2 h-[calc(100vh-16rem)] min-h-[450px] mt-6">
           <Separator orientation="vertical" className="h-full bg-gray-700/30" />
         </div>
         
         <div className="block lg:hidden w-full">
-          <Separator className="bg-gray-700/30 my-2" />
+          <Separator className="bg-gray-700/30 my-3" />
         </div>
         
         <div className={cn(
-          "w-full h-[calc(100vh-15rem)] min-h-[400px] transition-all duration-500",
+          "w-full h-[calc(100vh-16rem)] min-h-[450px] transition-all duration-500",
           "shadow-glow rounded-xl"
         )}>
           <MapSelector className="w-full h-full" />
