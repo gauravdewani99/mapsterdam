@@ -1,6 +1,6 @@
 
 import React, { useEffect, useRef, useState } from "react";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useGame } from "@/context/GameContext";
 import { RefreshCw } from "lucide-react";
@@ -23,32 +23,25 @@ const ResultModal: React.FC = () => {
 
     try {
       const geocoder = new window.google.maps.Geocoder();
-      const response = await new Promise<google.maps.GeocoderResponse>((resolve, reject) => {
-        geocoder.geocode({ location }, (results, status) => {
-          if (status === window.google.maps.GeocoderStatus.OK) {
-            resolve(results);
+      
+      geocoder.geocode({ location }, (results, status) => {
+        if (status === window.google.maps.GeocoderStatus.OK && results && results.length > 0) {
+          // Look for the street name in address components
+          const addressComponents = results[0].address_components;
+          const streetComponent = addressComponents.find(
+            component => component.types.includes("route")
+          );
+          
+          if (streetComponent) {
+            setter(streetComponent.long_name);
           } else {
-            reject(status);
+            // If no street component found, use formatted address
+            setter(results[0].formatted_address.split(',')[0]);
           }
-        });
-      });
-
-      if (response && response.length > 0) {
-        // Look for the street name in address components
-        const addressComponents = response[0].address_components;
-        const streetComponent = addressComponents.find(
-          component => component.types.includes("route")
-        );
-        
-        if (streetComponent) {
-          setter(streetComponent.long_name);
         } else {
-          // If no street component found, use formatted address
-          setter(response[0].formatted_address.split(',')[0]);
+          setter("Unknown street");
         }
-      } else {
-        setter("Unknown street");
-      }
+      });
     } catch (error) {
       console.error("Error fetching street name:", error);
       setter("Street name unavailable");
@@ -145,6 +138,7 @@ const ResultModal: React.FC = () => {
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && startNewGame()}>
       <DialogContent className="max-w-md p-0 overflow-hidden bg-gradient-to-br from-dark-secondary to-dark-background border-dark-border/70 shadow-lg animate-scale-in">
+        <DialogTitle className="sr-only">Game Result</DialogTitle>
         <div className="w-full h-44 relative">
           <div ref={mapRef} className="w-full h-full"></div>
           
