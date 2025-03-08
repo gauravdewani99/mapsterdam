@@ -7,7 +7,7 @@ import StreetView from "@/components/StreetView";
 import MapSelector from "@/components/MapSelector";
 import ResultModal from "@/components/ResultModal";
 import { Button } from "@/components/ui/button";
-import { Bike, RefreshCw, Map } from "lucide-react";
+import { RefreshCw } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
 
@@ -34,11 +34,8 @@ const GameContent: React.FC = () => {
     return (
       <div className="flex items-center justify-center min-h-screen p-4 dutch-pattern">
         <div className="text-center max-w-md neo-blur p-10 amsterdam-fade-in">
-          <div className="flex justify-center mb-4">
-            <Bike className="text-dutch-orange h-14 w-14" />
-          </div>
-          <h1 className="text-4xl font-light mb-2 text-white">🚲 Mapsterdam</h1>
-          <p className="text-lg text-dutch-orange mb-6">Welcome to the GeoGuessr for Amsterdam!</p>
+          <h1 className="text-4xl font-light mb-2 text-white">Mapsterdam 🚲</h1>
+          <p className="text-muted-foreground mb-6">Welcome to the GeoGuessr for Amsterdam!</p>
           <div className="text-muted-foreground mb-8 space-y-3">
             <p className="text-base">Explore the city.</p>
             <p className="text-base">Get an AI clue about the street you are on.</p>
@@ -60,11 +57,8 @@ const GameContent: React.FC = () => {
   return (
     <div className="w-full min-h-screen flex flex-col">
       <div className="flex flex-col items-center px-6 py-5">
-        <div className="flex items-center">
-          <Bike className="text-dutch-orange h-8 w-8 mr-2" />
-          <h1 className="text-3xl font-light tracking-tight text-white">🚲 Mapsterdam</h1>
-        </div>
-        <p className="text-lg text-dutch-orange mt-1 mb-2">Welcome to the GeoGuessr for Amsterdam!</p>
+        <h1 className="text-3xl font-light tracking-tight text-white">Mapsterdam 🚲</h1>
+        <p className="text-muted-foreground mt-1 mb-2">Welcome to the GeoGuessr for Amsterdam!</p>
         <div className="text-muted-foreground text-center text-base max-w-lg space-y-1">
           <p>Explore the city.</p>
           <p>Get an AI clue about the street you are on.</p>
