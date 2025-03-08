@@ -1,10 +1,11 @@
 
 import React, { useEffect, useRef } from "react";
-import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useGame } from "@/context/GameContext";
-import { RefreshCw } from "lucide-react";
+import { RefreshCw, MapPin } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Card, CardContent } from "@/components/ui/card";
 
 const ResultModal: React.FC = () => {
   const { gameState, currentLocation, currentLocationName, guessedLocation, distance, startNewGame } = useGame();
@@ -67,7 +68,7 @@ const ResultModal: React.FC = () => {
       title: "Actual Location"
     });
 
-    // Add marker for the guessed location - now using orange to match branding
+    // Add marker for the guessed location - using orange to match branding
     new window.google.maps.Marker({
       position: guessedLocation,
       map: map,
@@ -100,43 +101,60 @@ const ResultModal: React.FC = () => {
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && startNewGame()}>
-      <DialogContent className="max-w-xs p-0 overflow-hidden bg-gradient-to-br from-dark-secondary to-dark-background border-dark-border/70 shadow-lg animate-scale-in">
-        <DialogTitle className="sr-only">Game Result</DialogTitle>
-        
-        {/* Map display - now directly adjacent to content with no gap */}
-        <div className="w-full h-28 relative">
-          <div ref={mapRef} className="w-full h-full"></div>
+      <DialogContent className="max-w-md p-0 overflow-hidden bg-gradient-to-br from-dark-secondary to-dark-background border-dark-border/70 shadow-lg animate-scale-in rounded-xl">
+        {/* Map display - takes up more space in the new design */}
+        <div className="w-full h-48 relative">
+          <div ref={mapRef} className="w-full h-full rounded-t-xl"></div>
         </div>
         
-        {/* Content section - removed extra padding from top */}
-        <div className="p-3 pt-2 bg-dark-secondary/70">
-          {/* Success/failure message - now closer to the map */}
+        {/* Result content */}
+        <div className="p-5 bg-dark-secondary/80">
+          {/* Success/failure badge */}
           <div className={cn(
-            "mb-2 p-2 rounded-md text-center",
-            isSuccessful ? "bg-green-500/20 text-green-400" : "bg-dutch-orange/20 text-dutch-orange"
+            "inline-block px-3 py-1 rounded-full text-sm font-medium mb-3",
+            isSuccessful ? "bg-green-500/30 text-green-300" : "bg-dutch-orange/30 text-dutch-orange"
           )}>
-            <p className="font-medium mb-0.5">
-              {isSuccessful ? "Great guess!" : "Nice try!"}
-            </p>
-            <p className="text-sm">
-              {isSuccessful
-                ? "You're within 1 kilometer of the actual location!"
-                : `You missed by ${formattedDistance}`}
-            </p>
+            {isSuccessful ? "Great Guess!" : "Nice Try!"}
           </div>
           
-          {/* Location information - better spacing */}
-          <div className="mb-2.5 p-2 bg-dark-primary/30 rounded-md text-center text-white/80">
-            <p className="text-sm">The actual location was {locationDisplay}.</p>
-          </div>
+          {/* Main result card */}
+          <Card className="bg-dark-primary/40 border-dark-border/50 mb-4 overflow-hidden">
+            <CardContent className="p-0">
+              {/* Distance result */}
+              <div className="p-4 border-b border-dark-border/30">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="text-white font-medium">Your Result</h3>
+                    <p className="text-muted-foreground text-sm">
+                      {isSuccessful 
+                        ? "You're within 1 kilometer of the location!"
+                        : `You missed by ${formattedDistance}`}
+                    </p>
+                  </div>
+                  <div className={cn(
+                    "text-2xl font-bold",
+                    isSuccessful ? "text-green-400" : "text-dutch-orange"
+                  )}>
+                    {isSuccessful ? "🎯" : formattedDistance}
+                  </div>
+                </div>
+              </div>
+              
+              {/* Location information */}
+              <div className="p-4 flex items-start">
+                <MapPin className="text-dutch-orange mr-2 mt-0.5 h-5 w-5 flex-shrink-0" />
+                <div>
+                  <h3 className="text-white font-medium">Actual Location</h3>
+                  <p className="text-muted-foreground text-sm">{locationDisplay}</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
           
           {/* Play again button */}
           <Button 
             onClick={startNewGame}
-            className={cn(
-              "w-full bg-gradient-to-r from-dutch-orange to-dutch-red hover:bg-dutch-orange",
-              "text-white transition-all"
-            )}
+            className="w-full bg-gradient-to-r from-dutch-orange to-dutch-red hover:bg-dutch-orange text-white transition-all"
           >
             <RefreshCw size={16} className="mr-2" />
             Play Again
