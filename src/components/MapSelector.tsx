@@ -158,24 +158,6 @@ const MapSelector: React.FC<MapSelectorProps> = ({ className }) => {
           west: 4.7287
         };
         
-        const amsterdamCoords = [
-          { lat: amsterdamBounds.north, lng: amsterdamBounds.west },
-          { lat: amsterdamBounds.north, lng: amsterdamBounds.east },
-          { lat: amsterdamBounds.south, lng: amsterdamBounds.east },
-          { lat: amsterdamBounds.south, lng: amsterdamBounds.west }
-        ];
-        
-        const amsterdamBorder = new window.google.maps.Polygon({
-          paths: amsterdamCoords,
-          strokeColor: "#e04e39",
-          strokeOpacity: 0.8,
-          strokeWeight: 2,
-          fillColor: "#e04e39",
-          fillOpacity: 0.05
-        });
-        
-        amsterdamBorder.setMap(map);
-
         const initialPosition = amsterdamCenter;
         
         const marker = new window.google.maps.Marker({
