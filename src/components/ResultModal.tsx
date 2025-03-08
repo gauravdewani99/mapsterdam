@@ -7,12 +7,13 @@ import { RefreshCw } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const ResultModal: React.FC = () => {
-  const { gameState, currentLocation, guessedLocation, distance, startNewGame } = useGame();
+  const { gameState, currentLocation, currentLocationName, guessedLocation, distance, startNewGame } = useGame();
   const mapRef = useRef<HTMLDivElement>(null);
   
   const isOpen = gameState === "result";
   const isSuccessful = distance !== null && distance <= 1;
   const formattedDistance = distance !== null ? `${Math.round(distance)} km` : "Calculating...";
+  const locationDisplay = currentLocationName || "an interesting location in Amsterdam";
 
   // Initialize the result map when the modal is open
   useEffect(() => {
@@ -119,6 +120,11 @@ const ResultModal: React.FC = () => {
                 ? "You're within 1 kilometer of the actual location!"
                 : `You missed by ${formattedDistance}`}
             </p>
+          </div>
+          
+          {/* Location information */}
+          <div className="mb-1.5 p-1.5 bg-dark-primary/30 rounded-md text-center text-white/80">
+            <p className="text-sm">The actual location was {locationDisplay}.</p>
           </div>
           
           <Button 

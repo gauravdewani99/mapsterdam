@@ -22,6 +22,8 @@ interface GameContextType {
   errorMessage: string | null;
   setErrorMessage: (message: string | null) => void;
   retryFetchApiKey: () => Promise<void>;
+  currentLocationName: string | null;
+  setCurrentLocationName: (name: string | null) => void;
 }
 
 const GameContext = createContext<GameContextType | undefined>(undefined);
@@ -35,6 +37,7 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [isWinner, setIsWinner] = useState<boolean>(false);
   const [loadingMaps, setLoadingMaps] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [currentLocationName, setCurrentLocationName] = useState<string | null>(null);
   const { toast } = useToast();
 
   const fetchApiKey = async () => {
@@ -92,6 +95,7 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const startNewGame = () => {
     setGuessedLocation(null);
     setDistance(null);
+    setCurrentLocationName(null);
     
     // If we're already in playing state but want a new location,
     // set currentLocation to null to trigger re-initialization of Street View
@@ -126,6 +130,8 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         errorMessage,
         setErrorMessage,
         retryFetchApiKey,
+        currentLocationName,
+        setCurrentLocationName,
       }}
     >
       {children}

@@ -1,3 +1,4 @@
+
 import React, { useEffect, useRef, useState } from "react";
 import { useGame } from "@/context/GameContext";
 import { getRandomLocation } from "@/utils/locationUtils";
@@ -15,7 +16,8 @@ interface StreetViewProps {
 const StreetView: React.FC<StreetViewProps> = ({ className }) => {
   const { 
     apiKey, 
-    setCurrentLocation, 
+    setCurrentLocation,
+    setCurrentLocationName,
     currentLocation, 
     gameState,
     loadingMaps,
@@ -62,12 +64,14 @@ const StreetView: React.FC<StreetViewProps> = ({ className }) => {
         );
         
         if (routeComponent) {
+          setCurrentLocationName(routeComponent.long_name);
           return routeComponent.long_name;
         }
         
         const formattedAddress = response.results[0].formatted_address;
         const addressParts = formattedAddress.split(',');
         if (addressParts.length > 0) {
+          setCurrentLocationName(addressParts[0].trim());
           return addressParts[0].trim();
         }
       }
@@ -246,6 +250,9 @@ const StreetView: React.FC<StreetViewProps> = ({ className }) => {
                 lng: position.lng()
               });
               
+              // Fetch and store the street name when position changes
+              fetchStreetName(position);
+              
               setClue(null);
               
               if (showClue) {
@@ -258,6 +265,13 @@ const StreetView: React.FC<StreetViewProps> = ({ className }) => {
         });
         
         setCurrentLocation(randomLocation);
+        
+        // Fetch the initial street name
+        if (geocoderRef.current) {
+          const position = new google.maps.LatLng(randomLocation.lat, randomLocation.lng);
+          fetchStreetName(position);
+        }
+        
         setLoadingStreetView(false);
         setLoadingMaps(false);
       } catch (error) {
