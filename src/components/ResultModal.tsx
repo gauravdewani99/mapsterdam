@@ -1,14 +1,13 @@
 
 import React, { useEffect, useRef } from "react";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useGame } from "@/context/GameContext";
-import { formatDistance } from "@/utils/locationUtils";
-import { CheckCircle, XCircle, RefreshCw, MapPin } from "lucide-react";
+import { RefreshCw } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const ResultModal: React.FC = () => {
-  const { gameState, distance, isWinner, startNewGame, currentLocation, guessedLocation } = useGame();
+  const { gameState, currentLocation, guessedLocation, startNewGame } = useGame();
   const mapRef = useRef<HTMLDivElement>(null);
   
   const isOpen = gameState === "result";
@@ -99,45 +98,6 @@ const ResultModal: React.FC = () => {
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && startNewGame()}>
       <DialogContent className="max-w-md p-0 overflow-hidden bg-gradient-to-br from-dark-secondary to-dark-background border-dark-border/70 shadow-lg animate-scale-in">
-        <div className="p-5 pb-4">
-          <DialogHeader className="text-center mb-2">
-            <DialogTitle className={cn(
-              "text-2xl font-light mb-1",
-              isWinner ? "text-green-400" : "text-dutch-orange"
-            )}>
-              {isWinner ? "Impressive!" : "Not Quite..."}
-            </DialogTitle>
-            <DialogDescription className="text-base text-white/80">
-              {isWinner 
-                ? "You have a remarkable sense of geography!"
-                : "Keep exploring and improving your geographic intuition."}
-            </DialogDescription>
-          </DialogHeader>
-          
-          <div className="flex flex-col items-center py-2 space-y-3">
-            <div 
-              className={cn(
-                "flex items-center justify-center w-14 h-14 rounded-full",
-                isWinner 
-                  ? "bg-green-500/20 text-green-400" 
-                  : "bg-dutch-orange/20 text-dutch-orange"
-              )}
-            >
-              {isWinner 
-                ? <CheckCircle size={28} /> 
-                : <XCircle size={28} />}
-            </div>
-            
-            <div className="text-center">
-              <p className="text-white/90 mb-1">
-                {distance !== null && (
-                  <>Your guess was <span className="font-medium text-white">{formatDistance(distance, 2)}</span> away</>
-                )}
-              </p>
-            </div>
-          </div>
-        </div>
-        
         <div className="w-full h-44 relative">
           <div ref={mapRef} className="w-full h-full"></div>
           
@@ -158,10 +118,13 @@ const ResultModal: React.FC = () => {
         <div className="p-4 pt-3 bg-dark-secondary/70">
           <Button 
             onClick={startNewGame}
-            className="w-full bg-gradient-to-r from-dutch-orange to-dutch-red hover:bg-dutch-orange text-white transition-all"
+            className={cn(
+              "w-full bg-gradient-to-r from-dutch-orange to-dutch-red hover:bg-dutch-orange",
+              "text-white transition-all"
+            )}
           >
             <RefreshCw size={16} className="mr-2" />
-            New Adventure
+            Play Again
           </Button>
         </div>
       </DialogContent>
