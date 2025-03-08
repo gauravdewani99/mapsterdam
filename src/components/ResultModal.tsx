@@ -26,24 +26,22 @@ const ResultModal: React.FC = () => {
             "mb-3 p-3 rounded-md text-center",
             isSuccessful ? "bg-green-500/20 text-green-400" : "bg-dutch-orange/20 text-dutch-orange"
           )}>
-            <p className="font-medium mb-1">
+            <p className="font-medium">
               {isSuccessful ? "Great guess!" : "Nice try!"}
             </p>
             <p className="text-sm">
               {isSuccessful
-                ? "You're within 1 kilometer of the actual location!"
+                ? "You're within 1 kilometer of the actual location"
                 : `You missed by ${formattedDistance}`}
             </p>
           </div>
           
           {/* Location information - Now with highlighted street name and icon */}
-          <div className="mb-3 p-3 bg-dark-primary/30 rounded-md text-center">
-            <p className="text-sm text-white/80 flex items-center justify-center">
-              The actual location was 
-              <span className="inline-flex items-center ml-1 mr-1">
-                <MapPin size={14} className="mr-1 text-dutch-orange" />
-                <span className="font-bold text-dutch-orange">{locationDisplay}</span>
-              </span>.
+          <div className="mb-3 p-3 bg-dark-primary/30 rounded-md">
+            <p className="text-sm text-white/80 flex items-center justify-center whitespace-nowrap overflow-hidden text-ellipsis">
+              <span className="mr-1">The actual location was</span>
+              <MapPin size={14} className="mx-1 text-dutch-orange flex-shrink-0" />
+              <span className="font-bold text-dutch-orange truncate">{locationDisplay}</span>
             </p>
           </div>
           
