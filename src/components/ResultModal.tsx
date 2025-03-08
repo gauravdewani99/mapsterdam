@@ -102,14 +102,17 @@ const ResultModal: React.FC = () => {
     <Dialog open={isOpen} onOpenChange={(open) => !open && startNewGame()}>
       <DialogContent className="max-w-xs p-0 overflow-hidden bg-gradient-to-br from-dark-secondary to-dark-background border-dark-border/70 shadow-lg animate-scale-in">
         <DialogTitle className="sr-only">Game Result</DialogTitle>
-        <div className="w-full h-24 relative">
+        
+        {/* Map display - now directly adjacent to content with no gap */}
+        <div className="w-full h-28 relative">
           <div ref={mapRef} className="w-full h-full"></div>
         </div>
         
-        <div className="p-2 bg-dark-secondary/70">
-          {/* Distance display with success/failure message */}
+        {/* Content section - removed extra padding from top */}
+        <div className="p-3 pt-2 bg-dark-secondary/70">
+          {/* Success/failure message - now closer to the map */}
           <div className={cn(
-            "mb-1.5 p-1.5 rounded-md text-center",
+            "mb-2 p-2 rounded-md text-center",
             isSuccessful ? "bg-green-500/20 text-green-400" : "bg-dutch-orange/20 text-dutch-orange"
           )}>
             <p className="font-medium mb-0.5">
@@ -122,11 +125,12 @@ const ResultModal: React.FC = () => {
             </p>
           </div>
           
-          {/* Location information */}
-          <div className="mb-1.5 p-1.5 bg-dark-primary/30 rounded-md text-center text-white/80">
+          {/* Location information - better spacing */}
+          <div className="mb-2.5 p-2 bg-dark-primary/30 rounded-md text-center text-white/80">
             <p className="text-sm">The actual location was {locationDisplay}.</p>
           </div>
           
+          {/* Play again button */}
           <Button 
             onClick={startNewGame}
             className={cn(
