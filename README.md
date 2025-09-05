@@ -1,8 +1,10 @@
-# Welcome to your Lovable project
+# Welcome to Mapsterdam
 
 ## Project info
 
-**URL**: https://lovable.dev/projects/568363c0-3ba2-4c48-aad3-c7a472fc75b5
+Mapsterdam is a GeoGuessr-inspired game set in Amsterdam. Explore the street, get an AI clue, and guess where you are.
+
+**URL**: https://streetview-quester.lovable.app/
 
 ## How can I edit this code?
 
