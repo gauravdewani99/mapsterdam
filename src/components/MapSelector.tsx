@@ -300,8 +300,8 @@ const MapSelector: React.FC<MapSelectorProps> = ({ className }) => {
       
       {gameState === "playing" && (
         <>
-          <div className="absolute top-4 left-0 right-0 z-10 flex justify-center">
-            <div className="glow-panel px-4 py-2 w-full max-w-md mx-4">
+          <div className="absolute top-2 sm:top-4 left-0 right-0 z-10 flex justify-center">
+            <div className="glow-panel px-3 sm:px-4 py-2 w-full max-w-md mx-2 sm:mx-4">
               <PlacesAutocomplete 
                 onPlaceSelected={handlePlaceSelected} 
                 className="w-full"
@@ -309,35 +309,39 @@ const MapSelector: React.FC<MapSelectorProps> = ({ className }) => {
             </div>
           </div>
           
-          <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-20">
+          <div className="absolute bottom-2 sm:bottom-4 left-1/2 transform -translate-x-1/2 z-20">
             <Button
               onClick={handleConfirmGuess}
               disabled={!isGuessReady || isCalculating || invalidLocation}
               variant="amsterdam" 
               size="lg" 
-              className="font-light tracking-wide canal-ripple"
+              className="font-light tracking-wide canal-ripple h-10 sm:h-11 px-4 sm:px-6 text-sm sm:text-base"
             >
               {isCalculating ? (
                 <div className="flex items-center gap-2">
                   <div className="spinner !w-4 !h-4"></div>
-                  <span>Calculating...</span>
+                  <span className="hidden sm:inline">Calculating...</span>
+                  <span className="sm:hidden">Calculating</span>
                 </div>
               ) : (
-                "Confirm Guess"
+                <>
+                  <span className="hidden sm:inline">Confirm Guess</span>
+                  <span className="sm:hidden">Confirm</span>
+                </>
               )}
             </Button>
           </div>
           
-          <div className="absolute bottom-16 left-1/2 transform -translate-x-1/2 z-10 flex flex-col items-center">
-            <div className="neo-blur p-3 mb-3 flex items-center gap-2 text-sm text-white">
-              <MapPin size={16} className="text-dutch-orange" />
-              <span>{isDragging ? "Release to place marker" : "Drag the marker to select your guess"}</span>
+          <div className="absolute bottom-12 sm:bottom-16 left-1/2 transform -translate-x-1/2 z-10 flex flex-col items-center">
+            <div className="neo-blur p-2 sm:p-3 mb-2 sm:mb-3 flex items-center gap-2 text-xs sm:text-sm text-white max-w-[90vw] sm:max-w-none">
+              <MapPin size={14} className="text-dutch-orange flex-shrink-0" />
+              <span className="text-center">{isDragging ? "Release to place marker" : "Drag marker to guess"}</span>
             </div>
             
             {invalidLocation && (
-              <div className="flex items-center gap-2 text-xs text-destructive animate-pulse mb-3">
-                <AlertTriangle size={14} />
-                <span>Invalid location: Outside of Amsterdam</span>
+              <div className="flex items-center gap-2 text-xs text-destructive animate-pulse mb-2 sm:mb-3 bg-black/50 px-2 py-1 rounded">
+                <AlertTriangle size={12} />
+                <span>Outside Amsterdam</span>
               </div>
             )}
           </div>

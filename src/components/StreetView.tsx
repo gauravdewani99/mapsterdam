@@ -345,40 +345,40 @@ const StreetView: React.FC<StreetViewProps> = ({ className }) => {
       />
       
       {gameState === "playing" && !loadingStreetView && (
-        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-20">
+        <div className="absolute bottom-2 sm:bottom-4 left-1/2 transform -translate-x-1/2 z-20">
           <Button 
             variant="amsterdam" 
             size="lg" 
             onClick={toggleClue}
-            className="font-light tracking-wide canal-ripple"
+            className="font-light tracking-wide canal-ripple h-10 sm:h-11 px-4 sm:px-6 text-sm sm:text-base"
           >
-            <Sparkles className="mr-1" />
+            <Sparkles className="mr-1 sm:mr-2 w-4 h-4" />
             AI Clue
           </Button>
         </div>
       )}
 
       {showClue && gameState === "playing" && (
-        <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-20 w-[90%] max-w-md">
+        <div className="absolute top-2 sm:top-4 left-1/2 transform -translate-x-1/2 z-20 w-[95%] sm:w-[90%] max-w-md px-2 sm:px-0">
           <Card className="bg-gradient-to-br from-dark-secondary to-dark-background border-dark-border/70 shadow-lg overflow-hidden animate-fade-in">
             <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_top_right,_var(--dutch-orange),_transparent_70%)]"></div>
-            <CardHeader className="pb-1 pt-3 px-4 flex flex-row items-center justify-between">
-              <CardTitle className="text-base font-light flex items-center">
-                <Bot className="mr-2 text-dutch-orange" size={16} />
+            <CardHeader className="pb-1 pt-2 sm:pt-3 px-3 sm:px-4 flex flex-row items-center justify-between">
+              <CardTitle className="text-sm sm:text-base font-light flex items-center">
+                <Bot className="mr-1 sm:mr-2 text-dutch-orange" size={14} />
                 <span className="text-white">AI Location Clue</span>
               </CardTitle>
-              <Button variant="ghost" size="sm" className="h-7 w-7 p-0 text-white/60 hover:text-white" onClick={toggleClue}>
+              <Button variant="ghost" size="sm" className="h-6 w-6 sm:h-7 sm:w-7 p-0 text-white/60 hover:text-white" onClick={toggleClue}>
                 ×
               </Button>
             </CardHeader>
-            <CardContent className="px-4 pb-3 pt-1">
+            <CardContent className="px-3 sm:px-4 pb-2 sm:pb-3 pt-1">
               {loadingClue ? (
-                <div className="flex items-center text-white/80 text-sm">
-                  <Loader2 className="animate-spin mr-2" size={14} />
+                <div className="flex items-center text-white/80 text-xs sm:text-sm">
+                  <Loader2 className="animate-spin mr-2" size={12} />
                   Generating insight about this location...
                 </div>
               ) : (
-                <p className="text-white/80 text-sm">{clue || "This area has some interesting features typical of Amsterdam's urban design."}</p>
+                <p className="text-white/80 text-xs sm:text-sm leading-relaxed">{clue || "This area has some interesting features typical of Amsterdam's urban design."}</p>
               )}
             </CardContent>
           </Card>
