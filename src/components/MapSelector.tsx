@@ -160,6 +160,7 @@ const MapSelector: React.FC<MapSelectorProps> = ({ className }) => {
         
         const initialPosition = amsterdamCenter;
         
+        // Create custom marker with enhanced visibility
         const marker = new window.google.maps.Marker({
           position: initialPosition,
           map: map,
@@ -167,11 +168,12 @@ const MapSelector: React.FC<MapSelectorProps> = ({ className }) => {
           animation: window.google.maps.Animation.DROP,
           icon: {
             path: window.google.maps.SymbolPath.CIRCLE,
-            fillColor: "#e04e39",
-            fillOpacity: 1,
-            strokeColor: "#FFFFFF",
-            strokeWeight: 1.5,
-            scale: 8
+            fillColor: "#ff6b35",
+            fillOpacity: 0.9,
+            strokeColor: "#ffffff",
+            strokeWeight: 3,
+            scale: 12,
+            strokeOpacity: 1,
           }
         });
         
@@ -315,7 +317,7 @@ const MapSelector: React.FC<MapSelectorProps> = ({ className }) => {
               disabled={!isGuessReady || isCalculating || invalidLocation}
               variant="amsterdam" 
               size="lg" 
-              className="font-light tracking-wide canal-ripple h-10 sm:h-11 px-4 sm:px-6 text-sm sm:text-base"
+              className="font-semibold tracking-wide h-11 sm:h-12 px-6 sm:px-8 text-base sm:text-lg shadow-xl"
             >
               {isCalculating ? (
                 <div className="flex items-center gap-2">
@@ -333,15 +335,15 @@ const MapSelector: React.FC<MapSelectorProps> = ({ className }) => {
           </div>
           
           <div className="absolute bottom-12 sm:bottom-16 left-1/2 transform -translate-x-1/2 z-10 flex flex-col items-center">
-            <div className="neo-blur p-2 sm:p-3 mb-2 sm:mb-3 flex items-center gap-2 text-xs sm:text-sm text-white max-w-[90vw] sm:max-w-none">
-              <MapPin size={14} className="text-dutch-orange flex-shrink-0" />
-              <span className="text-center">{isDragging ? "Release to place marker" : "Drag marker to guess"}</span>
+            <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl p-3 sm:p-4 mb-2 sm:mb-3 flex items-center gap-2 text-xs sm:text-sm text-white max-w-[90vw] sm:max-w-none shadow-lg">
+              <MapPin size={16} className="text-orange-400 flex-shrink-0 drop-shadow-lg" />
+              <span className="text-center font-medium">{isDragging ? "Release to place marker" : "Drag the bright marker to guess"}</span>
             </div>
             
             {invalidLocation && (
-              <div className="flex items-center gap-2 text-xs text-destructive animate-pulse mb-2 sm:mb-3 bg-black/50 px-2 py-1 rounded">
-                <AlertTriangle size={12} />
-                <span>Outside Amsterdam</span>
+              <div className="flex items-center gap-2 text-xs text-red-300 animate-pulse mb-2 sm:mb-3 bg-red-500/20 backdrop-blur-lg border border-red-400/30 px-3 py-2 rounded-xl shadow-lg">
+                <AlertTriangle size={14} />
+                <span className="font-medium">Outside Amsterdam</span>
               </div>
             )}
           </div>

@@ -347,10 +347,10 @@ const StreetView: React.FC<StreetViewProps> = ({ className }) => {
       {gameState === "playing" && !loadingStreetView && (
         <div className="absolute bottom-2 sm:bottom-4 left-1/2 transform -translate-x-1/2 z-20">
           <Button 
-            variant="amsterdam" 
+            variant="glass" 
             size="lg" 
             onClick={toggleClue}
-            className="font-light tracking-wide canal-ripple h-10 sm:h-11 px-4 sm:px-6 text-sm sm:text-base"
+            className="font-semibold tracking-wide h-11 sm:h-12 px-6 sm:px-8 text-base sm:text-lg shadow-xl"
           >
             <Sparkles className="mr-1 sm:mr-2 w-4 h-4" />
             AI Clue
@@ -360,25 +360,25 @@ const StreetView: React.FC<StreetViewProps> = ({ className }) => {
 
       {showClue && gameState === "playing" && (
         <div className="absolute top-2 sm:top-4 left-1/2 transform -translate-x-1/2 z-20 w-[95%] sm:w-[90%] max-w-md px-2 sm:px-0">
-          <Card className="bg-gradient-to-br from-dark-secondary to-dark-background border-dark-border/70 shadow-lg overflow-hidden animate-fade-in">
-            <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_top_right,_var(--dutch-orange),_transparent_70%)]"></div>
-            <CardHeader className="pb-1 pt-2 sm:pt-3 px-3 sm:px-4 flex flex-row items-center justify-between">
-              <CardTitle className="text-sm sm:text-base font-light flex items-center">
-                <Bot className="mr-1 sm:mr-2 text-dutch-orange" size={14} />
+          <Card className="bg-black/40 backdrop-blur-xl border border-white/20 shadow-2xl overflow-hidden animate-fade-in rounded-3xl">
+            <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent rounded-3xl"></div>
+            <CardHeader className="relative pb-2 pt-3 sm:pt-4 px-4 sm:px-5 flex flex-row items-center justify-between">
+              <CardTitle className="text-sm sm:text-base font-semibold flex items-center">
+                <Bot className="mr-2 text-blue-400 drop-shadow-lg" size={16} />
                 <span className="text-white">AI Location Clue</span>
               </CardTitle>
-              <Button variant="ghost" size="sm" className="h-6 w-6 sm:h-7 sm:w-7 p-0 text-white/60 hover:text-white" onClick={toggleClue}>
+              <Button variant="ghost" size="sm" className="h-7 w-7 sm:h-8 sm:w-8 p-0 text-white/60 hover:text-white hover:bg-white/10 rounded-xl transition-all" onClick={toggleClue}>
                 ×
               </Button>
             </CardHeader>
-            <CardContent className="px-3 sm:px-4 pb-2 sm:pb-3 pt-1">
+            <CardContent className="relative px-4 sm:px-5 pb-3 sm:pb-4 pt-0">
               {loadingClue ? (
-                <div className="flex items-center text-white/80 text-xs sm:text-sm">
-                  <Loader2 className="animate-spin mr-2" size={12} />
+                <div className="flex items-center text-white/90 text-sm sm:text-base">
+                  <Loader2 className="animate-spin mr-2 text-blue-400" size={14} />
                   Generating insight about this location...
                 </div>
               ) : (
-                <p className="text-white/80 text-xs sm:text-sm leading-relaxed">{clue || "This area has some interesting features typical of Amsterdam's urban design."}</p>
+                <p className="text-white/90 text-sm sm:text-base leading-relaxed font-medium">{clue || "This area has some interesting features typical of Amsterdam's urban design."}</p>
               )}
             </CardContent>
           </Card>

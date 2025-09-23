@@ -45,7 +45,7 @@ const GameContent: React.FC = () => {
           </div>
           <Button 
             onClick={startNewGame}
-            className="w-full h-12 sm:h-14 text-base sm:text-lg font-light tracking-wide button-glow canal-ripple"
+            className="w-full font-bold tracking-wide shadow-2xl"
             variant="amsterdam"
             size="xl"
           >
@@ -88,10 +88,10 @@ const GameContent: React.FC = () => {
           {gameState === "playing" && (
             <div className="absolute top-2 right-2 sm:top-3 sm:right-3 lg:top-5 lg:right-5 z-10">
               <Button
-                variant="canal"
+                variant="glass"
                 size="sm"
                 onClick={startNewGame}
-                className="font-light canal-ripple text-xs sm:text-sm px-2 py-1 sm:px-3 sm:py-2 h-8 sm:h-9 lg:h-10"
+                className="font-semibold text-xs sm:text-sm px-3 py-2 sm:px-4 sm:py-2 h-9 sm:h-10 lg:h-11 shadow-lg"
               >
                 <RefreshCw size={14} className="mr-1 sm:mr-2" />
                 <span className="hidden sm:inline">New Location</span>
