@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Sparkles, Bot, Loader2 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
+import { loadGoogleMaps } from "@/utils/googleMapsLoader";
 import { useToast } from "@/hooks/use-toast";
 
 interface StreetViewProps {
@@ -29,7 +30,6 @@ const StreetView: React.FC<StreetViewProps> = ({ className }) => {
   const streetViewRef = useRef<google.maps.StreetViewPanorama | null>(null);
   const geocoderRef = useRef<google.maps.Geocoder | null>(null);
   const [loadingStreetView, setLoadingStreetView] = useState(true);
-  const scriptLoadedRef = useRef(false);
   const [showClue, setShowClue] = useState(false);
   const [clue, setClue] = useState<string | null>(null);
   const [loadingClue, setLoadingClue] = useState(false);
@@ -102,10 +102,18 @@ const StreetView: React.FC<StreetViewProps> = ({ className }) => {
         return;
       }
       
+      // No backend configured: fall back silently rather than nagging the
+      // player with an error toast on every clue request.
+      if (!supabase) {
+        setClue(`${streetName} is one of Amsterdam's characterful streets — look at the architecture and canals for hints.`);
+        setLoadingClue(false);
+        return;
+      }
+
       const { data, error } = await supabase.functions.invoke('generate-clue', {
         body: { streetName, city: "Amsterdam" }
       });
-      
+
       if (error) {
         console.error("Error generating clue:", error);
         setClue("This location has charming Dutch architecture typical of Amsterdam's historic areas.");
@@ -177,37 +185,13 @@ const StreetView: React.FC<StreetViewProps> = ({ className }) => {
 
     const loadMapsScript = () => {
       setLoadingMaps(true);
-      
-      if (window.google && window.google.maps && window.google.maps.StreetViewPanorama) {
-        initializeStreetView();
-        return;
-      }
 
-      if (scriptLoadedRef.current) {
-        const checkGoogleMapsInterval = setInterval(() => {
-          if (window.google && window.google.maps && window.google.maps.StreetViewPanorama) {
-            clearInterval(checkGoogleMapsInterval);
-            initializeStreetView();
-          }
-        }, 100);
-        return;
-      }
-
-      scriptLoadedRef.current = true;
-      const script = document.createElement("script");
-      script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`;
-      script.defer = true;
-      
-      script.onload = () => {
-        setTimeout(initializeStreetView, 100);
-      };
-      
-      script.onerror = () => {
-        console.error("Failed to load Google Maps API");
-        setLoadingMaps(false);
-        scriptLoadedRef.current = false;
-      };
-      document.head.appendChild(script);
+      loadGoogleMaps(apiKey)
+        .then(initializeStreetView)
+        .catch((error) => {
+          console.error("Failed to load Google Maps API", error);
+          setLoadingMaps(false);
+        });
     };
 
     const initializeStreetView = () => {

@@ -1,6 +1,5 @@
 
 import React, { createContext, useContext, useState, ReactNode, useEffect } from "react";
-import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
 interface GameContextType {
@@ -40,46 +39,32 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [currentLocationName, setCurrentLocationName] = useState<string | null>(null);
   const { toast } = useToast();
 
+  // The Maps key is a build-time env var rather than a server round-trip.
+  // A Maps JS key is necessarily public (the browser sends it to Google either
+  // way), so it is protected by HTTP referrer + API restrictions in the Google
+  // Cloud console, not by hiding it behind an endpoint.
   const fetchApiKey = async () => {
-    try {
-      setGameState("loading");
-      
-      const { data, error } = await supabase.functions.invoke('get-maps-api-key');
-      
-      if (error) {
-        console.error('Error fetching API key:', error);
-        setErrorMessage(`Failed to retrieve Google Maps API key: ${error.message}`);
-        setGameState("error");
-        toast({
-          title: "Error",
-          description: "Failed to retrieve Google Maps API key. Please try again.",
-          variant: "destructive",
-        });
-        return;
-      }
-      
-      if (data && data.apiKey) {
-        setApiKey(data.apiKey);
-        setGameState("initial");
-      } else {
-        setErrorMessage("API key not found in the response.");
-        setGameState("error");
-        toast({
-          title: "Error",
-          description: "Google Maps API key not found. Please try again later.",
-          variant: "destructive",
-        });
-      }
-    } catch (error) {
-      console.error('Error in fetchApiKey:', error);
-      setErrorMessage(`An unexpected error occurred: ${error instanceof Error ? error.message : String(error)}`);
+    setGameState("loading");
+
+    const key = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
+
+    if (!key) {
+      console.error('VITE_GOOGLE_MAPS_API_KEY is not set at build time.');
+      setErrorMessage(
+        "Google Maps API key is not configured. Set VITE_GOOGLE_MAPS_API_KEY and rebuild the app."
+      );
       setGameState("error");
       toast({
-        title: "Error",
-        description: "Something went wrong. Please try again later.",
+        title: "Configuration error",
+        description: "Google Maps API key is missing.",
         variant: "destructive",
       });
+      return;
     }
+
+    setApiKey(key);
+    setErrorMessage(null);
+    setGameState("initial");
   };
 
   const retryFetchApiKey = async () => {
