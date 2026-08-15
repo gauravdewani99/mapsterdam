@@ -1,0 +1,5 @@
+# Never upload local env files to a build — env vars belong in
+# Project Settings -> Environment Variables.
+.env
+.env.*
+!.env.example
