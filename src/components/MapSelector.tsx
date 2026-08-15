@@ -5,6 +5,7 @@ import { calculateDistance, isWithinAmsterdam } from "@/utils/locationUtils";
 import { cn } from "@/lib/utils";
 import { AlertTriangle, MapPin } from "lucide-react";
 import PlacesAutocomplete from "./PlacesAutocomplete";
+import { loadGoogleMaps } from "@/utils/googleMapsLoader";
 
 interface MapSelectorProps {
   className?: string;
@@ -28,7 +29,6 @@ const MapSelector: React.FC<MapSelectorProps> = ({ className }) => {
   const mapRef = useRef<HTMLDivElement>(null);
   const googleMapRef = useRef<google.maps.Map | null>(null);
   const markerRef = useRef<google.maps.Marker | null>(null);
-  const scriptLoadedRef = useRef(false);
   
   const [isGuessReady, setIsGuessReady] = useState(false);
   const [isCalculating, setIsCalculating] = useState(false);
@@ -216,38 +216,14 @@ const MapSelector: React.FC<MapSelectorProps> = ({ className }) => {
     };
 
     const loadMapsScript = () => {
-      if (window.google && window.google.maps && window.google.maps.Map) {
-        initializeMap();
-        return;
-      }
-      
-      if (scriptLoadedRef.current) {
-        const checkGoogleMapsInterval = setInterval(() => {
-          if (window.google && window.google.maps && window.google.maps.Map) {
-            clearInterval(checkGoogleMapsInterval);
-            initializeMap();
-          }
-        }, 100);
-        return;
-      }
-      
       setLoadingMaps(true);
-      scriptLoadedRef.current = true;
-      
-      const script = document.createElement("script");
-      script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`;
-      script.defer = true;
-      
-      script.onload = () => {
-        setTimeout(initializeMap, 100);
-      };
-      
-      script.onerror = () => {
-        console.error("Failed to load Google Maps API");
-        setLoadingMaps(false);
-        scriptLoadedRef.current = false;
-      };
-      document.head.appendChild(script);
+
+      loadGoogleMaps(apiKey)
+        .then(initializeMap)
+        .catch((error) => {
+          console.error("Failed to load Google Maps API", error);
+          setLoadingMaps(false);
+        });
     };
 
     loadMapsScript();
