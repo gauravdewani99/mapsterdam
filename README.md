@@ -27,8 +27,7 @@ npm run dev
 ### Configuration
 
 All config is via `VITE_*` env vars, which Vite embeds at **build time** — after
-changing any of them you must rebuild, not just reload. On Lovable, set these
-under **Cloud → Secrets**.
+changing any of them you must **redeploy**, not just reload the page.
 
 | Variable | Required | Purpose |
 | --- | --- | --- |
@@ -47,3 +46,16 @@ instead, in the Google Cloud console:
 
 - **Application restrictions:** HTTP referrers → your deployed origin(s)
 - **API restrictions:** Maps JavaScript API, Places API, Geocoding API
+
+The Google Cloud project also needs **billing enabled** — the Maps JavaScript
+API returns `BillingNotEnabledMapError` without it, even within the free
+monthly credit.
+
+## Deployment
+
+Deployed on Vercel as a static SPA. `vercel.json` sets the build command,
+output directory, and the rewrite that lets client-side routes resolve.
+
+Vercel builds on every push to `main`. Set `VITE_GOOGLE_MAPS_API_KEY` under
+**Project → Settings → Environment Variables**; because it is inlined at build
+time, changing it requires a redeploy to take effect.
